@@ -1,0 +1,1 @@
+{"id":"g-topology","name":"GTopology","level":"complex","scenarios":["网络拓扑","服务依赖","设备关系"],"capabilities":["节点","连线","缩放","选择","状态","流向动画"],"avoidWhen":["仅展示简单一对一关系"]}

@@ -1,0 +1,19 @@
+{
+  "id": "g-transfer",
+  "name": "GTransfer",
+  "level": "basic",
+  "category": "selection",
+  "base": "ElTransfer",
+  "description": "双栏数据穿梭",
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "states": [
+    "default",
+    "hover",
+    "active",
+    "focus",
+    "disabled"
+  ]
+}

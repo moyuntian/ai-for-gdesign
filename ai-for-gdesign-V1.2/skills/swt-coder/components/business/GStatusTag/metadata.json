@@ -1,0 +1,1 @@
+{"id":"g-status-tag","name":"GStatusTag","level":"business","scenarios":["设备状态","任务状态","告警等级"],"states":["normal","success","warning","danger","offline"]}

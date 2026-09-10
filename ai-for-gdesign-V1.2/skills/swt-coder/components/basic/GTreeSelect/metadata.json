@@ -1,0 +1,19 @@
+{
+  "id": "g-tree-select",
+  "name": "GTreeSelect",
+  "level": "basic",
+  "category": "selection",
+  "base": "ElTreeSelect",
+  "description": "树形数据选择",
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "states": [
+    "default",
+    "hover",
+    "active",
+    "focus",
+    "disabled"
+  ]
+}

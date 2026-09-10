@@ -1,0 +1,3 @@
+<template><div class="g-search"><el-input :model-value="modelValue" clearable :placeholder="placeholder" @update:model-value="$emit('update:modelValue',$event)" @keyup.enter="$emit('search',modelValue)"/><el-button type="primary" @click="$emit('search',modelValue)">查询</el-button><el-button @click="$emit('reset')">重置</el-button></div></template>
+<script setup lang="ts">withDefaults(defineProps<{modelValue:string;placeholder?:string}>(),{placeholder:'请输入关键词'});defineEmits<{(e:'update:modelValue',v:string):void;(e:'search',v:string):void;(e:'reset'):void}>();</script>
+<style scoped>.g-search{display:flex;gap:8px}.g-search .el-input{max-width:320px}</style>

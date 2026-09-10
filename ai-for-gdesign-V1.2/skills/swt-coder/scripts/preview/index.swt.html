@@ -1,0 +1,173 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN" data-swt-theme="default">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SWT Coder Preview</title>
+
+    <!-- ═══ 1. 本地运行时（FIXED — 勿改勿删勿换 CDN）═══ -->
+    <script src="./public/library/vue.global.prod.js"></script>
+    <script src="./public/library/vue-router.global.prod.js"></script>
+    <script src="./public/library/dayjs.min.js"></script>
+    <script src="./public/library/element-plus.full.min.js"></script>
+    <script src="./public/library/element-plus-icons-vue.iife.min.js"></script>
+    <script src="./public/library/element-plus-locale-zh-cn.min.js"></script>
+    <script src="./public/library/less.min.js"></script>
+    <script src="./public/library/vue3-sfc-loader.js"></script>
+    <link rel="stylesheet" href="./public/library/element-plus.index.css">
+
+    <!-- ═══ 2. GTS 主题（样式文件即交付件，位于 src/assets/themes/）═══ -->
+    <link rel="stylesheet" href="./src/assets/themes/base.css">
+    <link rel="stylesheet" href="./src/assets/themes/swt-bridge.css">
+    <link rel="stylesheet" href="./src/assets/themes/swt-default.css">
+    <!-- ▼▼ 换肤插槽：新皮肤 css 放入 src/assets/themes/ 后在此追加 link ▼▼ -->
+    <!-- ▲▲ 换肤插槽结束 ▲▲ -->
+
+    <!-- ═══ 3. 页面骨架样式（FIXED）═══ -->
+    <style>
+        html { font-size: 10px; }
+        html, body, #app { height: 100%; margin: 0; padding: 0; }
+        body {
+            font-family: var(--swt-font-family);
+            background: var(--swt-bg-page);
+            color: var(--swt-text-1);
+        }
+        #swt-boot-error {
+            display: none;
+            margin: 2.4rem auto;
+            max-width: 72rem;
+            padding: 1.2rem 1.6rem;
+            font-size: 1.3rem;
+            font-family: Consolas, monospace;
+            white-space: pre-wrap;
+            color: var(--swt-color-danger, #e02128);
+            background: var(--swt-bg-overlay, #fee7e8);
+            border: 0.1rem solid var(--swt-border-1, #f59297);
+            border-radius: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+    <pre id="swt-boot-error"></pre>
+
+    <!-- 源码映射（由 refresh-data.mjs / build.mjs 从 src/ 自动生成）-->
+    <script src="./preview-data.js"></script>
+
+    <script>
+        // ═══ 预览加载器（FIXED — 勿改）═══
+        // .vue 源码来自 window.__SWT_SRC__（src/ 的打包映射），由 vue3-sfc-loader
+        // 在浏览器内现场编译 — 与真实 Vite 工程同一套代码，无需构建步骤。
+        window.setSwtTheme = (name) => document.documentElement.setAttribute("data-swt-theme", name);
+
+        (function () {
+            var bootError = document.getElementById("swt-boot-error");
+            function showBootError(msg) {
+                bootError.textContent = "预览加载失败：" + msg;
+                bootError.style.display = "block";
+            }
+            window.addEventListener("error", function (e) { showBootError(e.message); });
+
+            if (!window.__SWT_SRC__) {
+                showBootError("preview-data.js 缺失或为空 — 运行 node scripts/build.mjs --dir 重新生成");
+                return;
+            }
+
+            var ASSET_EXT = [".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp", ".ico", ".bmp"];
+            var SRC = window.__SWT_SRC__;
+
+            function addStyle(textContent) {
+                var style = document.createElement("style");
+                style.textContent = textContent;
+                document.head.appendChild(style);
+            }
+
+            var options = {
+                moduleCache: Object.assign(Object.create(null), {
+                    vue: Vue,
+                    "vue-router": VueRouter,
+                    "element-plus": ElementPlus,
+                    "@element-plus/icons-vue": ElementPlusIconsVue,
+                    dayjs: dayjs,
+                    less: less,
+                }),
+                getFile: function (path) {
+                    var clean = String(path).split("?")[0].split("#")[0];
+                    if (ASSET_EXT.some(function (ext) { return clean.endsWith(ext); })) {
+                        var assetExt = clean.slice(clean.lastIndexOf("."));
+                        return Promise.resolve({ getContentData: function () { return ""; }, type: assetExt });
+                    }
+                    var content = SRC[clean];
+                    if (content === undefined) {
+                        return Promise.reject(new Error("源码映射中找不到 " + clean + " — 修改 src/ 后请重跑 build"));
+                    }
+                    // 剥 BOM：Windows 编辑器常写入 EF BB BF，会毒化 CSS 首条选择器 / JSON.parse
+                    if (content.charCodeAt(0) === 0xfeff) content = content.slice(1);
+                    // 类型取自真实扩展名；.js 按 .mjs 处理 —— sfc-loader 只对 .mjs 走 ESM 解析，
+                    // 而 Vite 语义中 src/ 下 .js 本就是 ESM，此处映射使预览与真实工程一致
+                    var type = clean.slice(clean.lastIndexOf("."));
+                    if (type === ".js") type = ".mjs";
+                    // 契约要求 getContentData 返回 Promise（部分调用链直接 .then）
+                    return Promise.resolve({ getContentData: function () { return Promise.resolve(content); }, type: type });
+                },
+                handleModule: function (type, getContentData, path) {
+                    if (type === ".css") {
+                        return Promise.resolve(getContentData()).then(addStyle).then(function () { return {}; });
+                    }
+                    if (type === ".less") {
+                        // Less → CSS 编译（less.js 已在页面加载）
+                        return Promise.resolve(getContentData()).then(function (text) {
+                            return window.less.render(String(text).replace(/^\uFEFF/, ""));
+                        }).then(function (result) {
+                            addStyle(result.css);
+                            return {};
+                        });
+                    }
+                    if (type === ".json") {
+                        // ESM 语义：default import 拿到解析后的对象（剥 BOM —— Windows 编辑器常带）
+                        return Promise.resolve(getContentData()).then(function (text) {
+                            var parsed = JSON.parse(String(text).replace(/^\uFEFF/, ""));
+                            return { default: parsed, __esModule: true };
+                        });
+                    }
+                    if (ASSET_EXT.indexOf(type) !== -1) {
+                        // 返回相对预览根的 URL（真实工程中 import 资源同样得到 URL，语义一致）
+                        return Promise.resolve("." + String(path).split("?")[0]);
+                    }
+                    // 注意：必须返回 undefined（不是 null）才会走 loader 对 .vue/.js 的默认编译处理
+                    return undefined;
+                },
+                addStyle: function (styleStr) { addStyle(styleStr); },
+                log: function (type) {
+                    if (type === "error") {
+                        var args = Array.prototype.slice.call(arguments, 1);
+                        showBootError(args.map(String).join(" "));
+                        console.error.apply(console, args);
+                    }
+                },
+            };
+
+            var app = Vue.createApp({
+                components: {
+                    SwtRoot: Vue.defineAsyncComponent(function () {
+                        return window["vue3-sfc-loader"].loadModule("/src/App.vue", options);
+                    }),
+                },
+                template: "<SwtRoot />",
+            });
+            app.use(ElementPlus, { locale: ElementPlusLocaleZhCn });
+
+            // 加载路由模块并安装（App.vue 使用 <RouterView />，需 router 提供）
+            window["vue3-sfc-loader"].loadModule("/src/router/index.js", options).then(
+                function (routerMod) {
+                    app.use(routerMod.default);
+                    app.mount("#app");
+                },
+                function (err) {
+                    showBootError("路由加载失败：" + (err && err.message ? err.message : String(err)));
+                }
+            );
+        })();
+    </script>
+</body>
+</html>

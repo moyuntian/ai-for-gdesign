@@ -1,0 +1,19 @@
+{
+  "id": "g-upload",
+  "name": "GUpload",
+  "level": "basic",
+  "category": "input",
+  "base": "ElUpload",
+  "description": "文件上传",
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "states": [
+    "default",
+    "hover",
+    "active",
+    "focus",
+    "disabled"
+  ]
+}

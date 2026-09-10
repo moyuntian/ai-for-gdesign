@@ -1,0 +1,19 @@
+{
+  "id": "g-breadcrumb",
+  "name": "GBreadcrumb",
+  "level": "basic",
+  "category": "navigation",
+  "base": "ElBreadcrumb",
+  "description": "层级路径",
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "states": [
+    "default",
+    "hover",
+    "active",
+    "focus",
+    "disabled"
+  ]
+}
