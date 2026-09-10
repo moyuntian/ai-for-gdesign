@@ -1,0 +1,45 @@
+schemaVersion: "1.0"
+title: Prototype Asset Sync Report
+sections:
+  - name: summary
+    required: true
+    fields:
+      - assetId
+      - prototypeRoot
+      - libraryRoot
+      - totalPrototypeComponents
+      - totalPrototypeTemplates
+      - added
+      - changed
+      - orphaned
+      - inSync
+      - actionable
+
+  - name: proposedActions
+    required: true
+    itemFields:
+      - kind
+      - id
+      - status
+      - action
+      - prototypeFile
+      - libraryFile
+      - reason
+
+  - name: decisionLog
+    required: true
+    description: Record user decisions for each actionable item.
+    itemFields:
+      - id
+      - decision   # approve / reject / needs-decoupling
+      - note
+
+  - name: result
+    required: false
+    description: Populated after sync execution.
+    fields:
+      - dryRun
+      - manifestVersion
+      - copiedCount
+      - updatedIndexes
+      - manifestPath

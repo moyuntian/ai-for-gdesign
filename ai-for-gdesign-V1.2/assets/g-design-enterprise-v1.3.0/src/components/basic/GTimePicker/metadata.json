@@ -1,0 +1,19 @@
+{
+  "id": "g-time-picker",
+  "name": "GTimePicker",
+  "level": "basic",
+  "category": "date-time",
+  "base": "ElTimePicker",
+  "description": "时间选择",
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "states": [
+    "default",
+    "hover",
+    "active",
+    "focus",
+    "disabled"
+  ]
+}

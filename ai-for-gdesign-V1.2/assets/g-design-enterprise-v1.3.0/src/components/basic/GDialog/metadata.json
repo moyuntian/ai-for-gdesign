@@ -1,0 +1,19 @@
+{
+  "id": "g-dialog",
+  "name": "GDialog",
+  "level": "basic",
+  "category": "overlay",
+  "base": "ElDialog",
+  "description": "模态任务",
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "states": [
+    "default",
+    "hover",
+    "active",
+    "focus",
+    "disabled"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "standard-list-page",
+  "name": "StandardListPage",
+  "complexity": "simple",
+  "scenarios": [
+    "查询列表",
+    "通用管理"
+  ],
+  "components": [
+    "GSearchBar",
+    "GDataTablePro"
+  ],
+  "pageStates": [
+    "loading",
+    "empty",
+    "error",
+    "forbidden",
+    "partial",
+    "ready"
+  ],
+  "feedback": [
+    "save-success",
+    "save-failure",
+    "delete-confirm",
+    "batch-result"
+  ]
+}

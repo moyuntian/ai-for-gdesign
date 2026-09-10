@@ -1,0 +1,19 @@
+{
+  "id": "g-drawer",
+  "name": "GDrawer",
+  "level": "basic",
+  "category": "overlay",
+  "base": "ElDrawer",
+  "description": "侧向详情与编辑",
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "states": [
+    "default",
+    "hover",
+    "active",
+    "focus",
+    "disabled"
+  ]
+}

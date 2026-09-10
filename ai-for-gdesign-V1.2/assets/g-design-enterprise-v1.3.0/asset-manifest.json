@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0",
+  "id": "g-design-enterprise",
+  "name": "G Design Enterprise",
+  "version": "1.3.0",
+  "framework": "vue3",
+  "componentBase": "element-plus@2.13.5",
+  "themes": ["light", "dark"],
+  "entry": "src/index.ts",
+  "tokens": "tokens/index.scss",
+  "catalog": "references/component-catalog.md",
+  "pageTemplates": "references/page-template-catalog.md",
+  "generationRules": "references/generation-rules.yaml",
+  "capabilities": ["form", "table", "dashboard", "topology", "monitoring", "alarm-management"],
+  "assetCounts": {"basic": 43, "business": 13, "complex": 5, "pageTemplates": 6, "total": 67},
+  "pageStates": ["loading", "empty", "error", "forbidden", "partial", "ready"],
+  "feedbackPatterns": ["save-success", "save-failure", "delete-confirm", "batch-result"],
+  "iconLibrary": {"id":"lucide","version":"1.43.0","license":"ISC","offline":true,"svgCount":2077,"component":"GIcon"}
+}

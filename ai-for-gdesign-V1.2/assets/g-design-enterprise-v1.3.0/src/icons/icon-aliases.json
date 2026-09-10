@@ -1,0 +1,11 @@
+{
+  "搜索":"search","新增":"plus","编辑":"square-pen","删除":"trash","保存":"save","关闭":"x",
+  "返回":"arrow-left","前进":"arrow-right","上移":"arrow-up","下移":"arrow-down","展开":"chevron-down","收起":"chevron-up",
+  "菜单":"menu","更多":"ellipsis","刷新":"refresh-cw","下载":"download","上传":"upload","导入":"file-up","导出":"file-down",
+  "设置":"settings","筛选":"list-filter","排序":"arrow-up-down","查看":"eye","隐藏":"eye-off","复制":"copy","打印":"printer",
+  "用户":"user","用户组":"users","权限":"shield-check","锁定":"lock","解锁":"lock-open","通知":"bell","帮助":"circle-question-mark",
+  "成功":"circle-check","提示":"info","警告":"triangle-alert","告警":"siren","错误":"circle-x","离线":"wifi-off",
+  "设备":"server","摄像头":"camera","网络":"network","拓扑":"workflow","数据库":"database","云":"cloud",
+  "位置":"map-pin","时间":"clock","日历":"calendar","任务":"clipboard-check","工单":"ticket-check","首页":"house",
+  "列表":"list","表格":"table-2","看板":"layout-dashboard","趋势":"trending-up","监控":"activity","代码":"code-xml"
+}

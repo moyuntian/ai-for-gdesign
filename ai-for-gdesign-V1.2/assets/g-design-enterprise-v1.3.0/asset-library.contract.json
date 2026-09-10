@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "1.0",
+  "libraryId": "g-design-enterprise",
+  "release": "1.3.0",
+  "status": "active",
+  "framework": "vue3",
+  "entry": "src/index.ts",
+  "tokens": "tokens/index.scss",
+  "discovery": {
+    "components": ["src/components"],
+    "templates": ["src/page-templates"],
+    "styles": ["src/styles", "tokens"],
+    "icons": ["assets/icons/lucide", "src/icons"]
+  },
+  "protectedPaths": ["asset-manifest.json", "asset-library.contract.json", "asset-catalog.json"],
+  "allowedSync": ["components", "page-templates", "tokens", "references"]
+}

@@ -1,0 +1,20 @@
+schema_version: 1.0
+project_id: ""
+sources: []
+product_goal:
+  statement: ""
+  status: unverified
+  evidence: []
+users: []
+scenarios: []
+core_tasks: []
+information_fields: []
+functions: []
+business_rules: []
+permissions: []
+risks: []
+success_criteria: []
+delivery_constraints: []
+assumptions: []
+conflicts: []
+open_questions: []

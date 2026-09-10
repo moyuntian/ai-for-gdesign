@@ -1,0 +1,29 @@
+{
+  "id": "edit-form-page",
+  "name": "EditFormPage",
+  "complexity": "simple",
+  "scenarios": [
+    "新建",
+    "编辑"
+  ],
+  "components": [
+    "ElForm",
+    "ElInput",
+    "ElSelect",
+    "ElSwitch"
+  ],
+  "pageStates": [
+    "loading",
+    "empty",
+    "error",
+    "forbidden",
+    "partial",
+    "ready"
+  ],
+  "feedback": [
+    "save-success",
+    "save-failure",
+    "delete-confirm",
+    "batch-result"
+  ]
+}

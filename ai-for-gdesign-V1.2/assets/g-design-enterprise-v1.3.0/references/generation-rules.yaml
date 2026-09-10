@@ -1,0 +1,28 @@
+asset_library: g-design-enterprise
+version: 1.2.0
+framework: vue3
+base_library: element-plus@2.13.5
+selection:
+  simple_list: StandardListPage
+  device_management: DeviceManagementPage
+  create_or_edit: EditFormPage
+  object_detail: ObjectDetailPage
+  topology_monitoring: TopologyMonitoringPage
+  alarm_impact: AlarmImpactPage
+rules:
+  - use semantic tokens instead of literal colors
+  - support light and dark themes
+  - cover loading empty error disabled and permission states
+  - prefer business components over repeated basic-component composition
+  - use topology only when relationships or propagation paths matter
+  - keep Element Plus public API conventions
+page_states:
+  required: [loading, empty, error, forbidden, partial, ready]
+feedback:
+  required: [save-success, save-failure, delete-confirm, batch-result]
+icons:
+  component: GIcon
+  source: lucide-static@1.43.0
+  offline: true
+  prefer_semantic_aliases: true
+  forbid_runtime_cdn: true

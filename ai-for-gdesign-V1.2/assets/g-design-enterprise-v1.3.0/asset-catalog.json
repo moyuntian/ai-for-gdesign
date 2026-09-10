@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "1.0",
+  "libraries": [
+    {
+      "id": "g-design-enterprise",
+      "name": "G Design Enterprise",
+      "release": "1.3.0",
+      "status": "active",
+      "framework": "vue3",
+      "componentBase": "element-plus@2.13.5",
+      "manifest": "asset-manifest.json",
+      "contract": "asset-library.contract.json",
+      "catalog": "references/component-catalog.md",
+      "pageTemplates": "references/page-template-catalog.md"
+    }
+  ]
+}

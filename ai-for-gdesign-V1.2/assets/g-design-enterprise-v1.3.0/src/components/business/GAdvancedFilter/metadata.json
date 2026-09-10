@@ -1,0 +1,17 @@
+{
+  "id": "gadvancedfilter",
+  "name": "GAdvancedFilter",
+  "level": "business",
+  "description": "可组合的高级筛选条件",
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "states": [
+    "default",
+    "loading",
+    "empty",
+    "error",
+    "disabled"
+  ]
+}
