@@ -22,8 +22,29 @@ el-input-number el-date-picker el-empty el-loading el-skeleton
 ```
 
 ## Mock API 模式
+
+Mock 数据是页面真实感的来源——**凡是数据驱动的 UI，一律走 mock**，禁止在 template 里硬编码。
+
+### 必须覆盖 mock 的场景
+| 场景 | mock 函数 | 说明 |
+|------|----------|------|
+| 主列表/表格 | `fetchList(params)` | ≥10 条，字段覆盖所有 table-column prop |
+| 下拉/筛选选项 | `fetchOptions(field)` 或 constants | el-select/cascader 的 options |
+| KPI/统计卡片 | `fetchKpi()` | 看板页数值、趋势、环比 |
+| 详情面板 | `fetchDetail(id)` | drawer/dialog 展示的完整字段 |
+| 保存/新增 | `saveItem(data)` | 表单提交模拟 |
+| 删除 | `deleteItem(id)` | 删除操作模拟 |
+
+### 数据字段要求
+- **日期：** `'2025-09-01'` 或 `'2025-09-10 14:30'` 字符串格式
+- **金额：** 数字带小数 `12500.00`
+- **百分比/进度：** 0-100 整数
+- **状态枚举：** value/label/tagType 三元组，与 constants.js 对齐
+- **分页：** 返回 `{ data: [...], total: N }`
+
+### 示例
 ```js
-import { fetchList } from '../../../mock/modules/{slug}.js'
+import { fetchList, fetchDetail, fetchOptions, fetchKpi } from '../../../mock/modules/{slug}.js'
 // mock/modules/{slug}.js: Promise + setTimeout 模拟异步
 ```
 

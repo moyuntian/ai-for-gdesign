@@ -143,31 +143,120 @@ writeFileSync(
   join(dest, 'mock', 'modules', `${slug}.js`),
   `// ${pageName} — Mock 数据 + API 请求模拟
 // 真实工程中替换为实际 API 调用（axios/fetch）
+// 注意：此文件应覆盖页面所有数据驱动区域——列表、详情、选项、KPI 等
 
-const mockData = [
-  { id: 1, name: '${pageName}示例-01', status: 'running' },
-  { id: 2, name: '${pageName}示例-02', status: 'stopped' },
-  { id: 3, name: '${pageName}示例-03', status: 'pending' },
-  { id: 4, name: '${pageName}示例-04', status: 'idle' },
-  { id: 5, name: '${pageName}示例-05', status: 'maintenance' },
+// ---- 状态枚举（与 constants.js 对齐）----
+const STATUS_OPTIONS = [
+  { value: 'running', label: '运行中', tagType: 'success' },
+  { value: 'stopped', label: '已停止', tagType: 'danger' },
+  { value: 'pending', label: '待处理', tagType: 'warning' },
+  { value: 'idle', label: '空闲', tagType: 'info' },
+  { value: 'maintenance', label: '维护中', tagType: 'primary' },
 ]
 
+// ---- 下拉/筛选选项 mock ----
+const FILTER_OPTIONS = {
+  status: STATUS_OPTIONS,
+  department: [
+    { value: 'dev', label: '研发部' },
+    { value: 'ops', label: '运维部' },
+    { value: 'product', label: '产品部' },
+    { value: 'design', label: '设计部' },
+  ],
+}
+
+// ---- 主列表数据（≥10 条，字段类型多样）----
+const mockData = [
+  { id: 1, name: '${pageName}-前端优化方案', status: 'running', department: 'dev', owner: '张明', createdAt: '2025-09-01 09:30', updatedAt: '2025-09-10 14:20', amount: 12500.00, progress: 85, priority: 'high' },
+  { id: 2, name: '${pageName}-后端服务迁移', status: 'stopped', department: 'dev', owner: '李华', createdAt: '2025-08-25 10:00', updatedAt: '2025-09-08 16:45', amount: 38000.00, progress: 40, priority: 'medium' },
+  { id: 3, name: '${pageName}-数据库扩容', status: 'pending', department: 'ops', owner: '王强', createdAt: '2025-09-05 11:15', updatedAt: '2025-09-09 09:00', amount: 7500.00, progress: 0, priority: 'high' },
+  { id: 4, name: '${pageName}-UI 组件库升级', status: 'running', department: 'design', owner: '赵芳', createdAt: '2025-08-20 14:00', updatedAt: '2025-09-10 11:30', amount: 6200.00, progress: 60, priority: 'low' },
+  { id: 5, name: '${pageName}-监控告警系统', status: 'idle', department: 'ops', owner: '刘伟', createdAt: '2025-09-02 08:45', updatedAt: '2025-09-07 17:00', amount: 18000.00, progress: 100, priority: 'medium' },
+  { id: 6, name: '${pageName}-用户权限重构', status: 'running', department: 'dev', owner: '陈静', createdAt: '2025-08-28 13:20', updatedAt: '2025-09-10 15:00', amount: 24000.00, progress: 55, priority: 'high' },
+  { id: 7, name: '${pageName}-API 网关部署', status: 'maintenance', department: 'ops', owner: '杨光', createdAt: '2025-09-03 10:30', updatedAt: '2025-09-09 14:00', amount: 15500.00, progress: 30, priority: 'medium' },
+  { id: 8, name: '${pageName}-产品需求评审', status: 'pending', department: 'product', owner: '周婷', createdAt: '2025-09-06 09:00', updatedAt: '2025-09-08 12:00', amount: 0, progress: 0, priority: 'low' },
+  { id: 9, name: '${pageName}-性能压测方案', status: 'running', department: 'dev', owner: '吴磊', createdAt: '2025-08-30 15:45', updatedAt: '2025-09-10 10:15', amount: 9800.00, progress: 70, priority: 'high' },
+  { id: 10, name: '${pageName}-日志分析平台', status: 'stopped', department: 'ops', owner: '孙超', createdAt: '2025-08-22 16:00', updatedAt: '2025-09-05 11:00', amount: 21000.00, progress: 25, priority: 'medium' },
+  { id: 11, name: '${pageName}-设计规范文档', status: 'running', department: 'design', owner: '林雪', createdAt: '2025-09-04 14:30', updatedAt: '2025-09-10 09:45', amount: 3200.00, progress: 90, priority: 'low' },
+  { id: 12, name: '${pageName}-安全审计整改', status: 'pending', department: 'dev', owner: '郑刚', createdAt: '2025-09-07 10:00', updatedAt: '2025-09-09 16:30', amount: 45000.00, progress: 0, priority: 'high' },
+]
+
+// ---- KPI/统计 mock ----
+const mockKpi = {
+  total: mockData.length,
+  running: mockData.filter((i) => i.status === 'running').length,
+  pending: mockData.filter((i) => i.status === 'pending').length,
+  totalAmount: mockData.reduce((sum, i) => sum + i.amount, 0),
+  avgProgress: Math.round(mockData.reduce((sum, i) => sum + i.progress, 0) / mockData.length),
+}
+
+// ---- 列表查询（支持分页、关键词、状态筛选）----
 export function fetchList(params = {}) {
   return new Promise((resolve) => {
     setTimeout(() => {
-      let result = mockData
+      let result = [...mockData]
       if (params.keyword) {
-        result = result.filter((item) => item.name.includes(params.keyword))
+        result = result.filter((item) => item.name.includes(params.keyword) || item.owner.includes(params.keyword))
       }
-      resolve({ data: result, total: result.length })
+      if (params.status) {
+        result = result.filter((item) => item.status === params.status)
+      }
+      if (params.department) {
+        result = result.filter((item) => item.department === params.department)
+      }
+      const page = params.page || 1
+      const pageSize = params.pageSize || 10
+      const start = (page - 1) * pageSize
+      resolve({ data: result.slice(start, start + pageSize), total: result.length })
     }, 300)
   })
 }
 
+// ---- 详情查询 ----
 export function fetchDetail(id) {
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve({ data: mockData.find((item) => item.id === id) })
+      const item = mockData.find((item) => item.id === Number(id))
+      resolve({ data: item ? { ...item, statusLabel: STATUS_OPTIONS.find((s) => s.value === item.status)?.label, description: \`这是 \${item.name} 的详细描述信息，包含项目背景、目标和执行计划。\`, timeline: [
+        { time: item.createdAt, event: '项目创建', operator: item.owner },
+        { time: item.updatedAt, event: '状态更新', operator: item.owner },
+      ] } : null })
+    }, 200)
+  })
+}
+
+// ---- 下拉选项查询 ----
+export function fetchOptions(field) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({ data: FILTER_OPTIONS[field] || [] })
+    }, 100)
+  })
+}
+
+// ---- KPI 查询 ----
+export function fetchKpi() {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({ data: mockKpi })
+    }, 200)
+  })
+}
+
+// ---- 新增/编辑（模拟保存）----
+export function saveItem(data) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({ data: { ...data, id: data.id || Date.now() }, success: true })
+    }, 300)
+  })
+}
+
+// ---- 删除（模拟）----
+export function deleteItem(id) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({ data: { id, success: true } })
     }, 200)
   })
 }

@@ -107,6 +107,16 @@ init 时指定：`node scripts/init.mjs "<folder>" "<slug>" --ui-library=element
 ### Step 1 — 布局策略 & Generative Expansion
 NEVER sparse：用尽全部数据、mock 真实文本、CTA、搜索/筛选/分页、状态标签等视觉语义。
 
+**Mock 数据覆盖清单（逐项检查，缺一即不完整）：**
+- **主列表/表格：** ≥ 10 条真实业务记录，字段覆盖所有 `el-table-column` 的 prop（含日期、金额、百分比、操作人等多类型字段）。
+- **下拉/选择器：** `el-select`/`el-cascader`/`el-radio-group`/`el-checkbox-group` 的 options **必须来自 mock 或 constants.js**，禁止在 template 里写死 `el-option` 硬编码列表。
+- **KPI/统计卡片：** 看板页的数值、趋势、百分比、环比同比数据必须来自 mock，禁止写死数字。
+- **状态/标签映射：** 状态枚举及对应的 `el-tag` type 映射放 constants.js，mock 数据中的 status 字段值与此枚举对齐。
+- **详情/抽屉/弹窗：** `el-drawer`/`el-dialog` 中展示的详情字段必须来自 `fetchDetail` mock 返回，禁止在模板里硬编码详情文本。
+- **Tab 页签：** `el-tab-pane` 若有独立列表数据，每个 tab 对应一组 mock 数据。
+- **分页：** mock 返回 `{ data, total }`，`el-pagination` 的 total 绑定到响应值。
+- **时间线/步骤/进度：** 时间线节点、步骤条数据、进度条数值均来自 mock。
+
 ### Step 2 — Init Workspace（MANDATORY）
 ```
 node scripts/init.mjs "{artifact-folder}" "{slug}" --ui-library=element-plus
@@ -137,10 +147,14 @@ node scripts/build.mjs --dir "{artifact-folder}/{slug}"
 - **Success:** `OK index.swt.html verified (N pages, M components, K el-tag uses)`
 - **Failure:** `RESULT: FAIL | <文件>: <原因>` → 修复 → 重跑（最多 3 次）
 
-### Step 5 — Output
+### Step 5 — Output & Preview
 ```
 <artifact type="text/link">{HTML_PATH value}</artifact>
 ```
+
+**预览方式（二选一）：**
+- **方式 A — HTTP 预览（推荐，功能完整）：** 运行 `node scripts/serve.mjs --dir "{artifact-folder}/{slug}"`，浏览器打开 `http://127.0.0.1:8765/index.swt.html`。
+- **方式 B — 双击 file:// 打开（备选，部分浏览器受限）：** 直接双击 `index.swt.html`。Chromium 内核浏览器（Chrome/Edge）对 `file://` 协议有安全限制（unique security origin），可能导致 vue3-sfc-loader 编译模块时失败。如遇白屏或安全错误，请改用方式 A。Firefox 可通过 `about:config` 设置 `security.fileuri.strict_origin_policy=false` 解除限制。
 
 ---
 
@@ -149,7 +163,7 @@ node scripts/build.mjs --dir "{artifact-folder}/{slug}"
 0. **布局选型:** B端控制台(`el-container`) / 列表页(标题→筛选→表格→分页) / 看板页(KPI行→图表区) / 内容页(单栏)
 1. **组件写法:** `<script setup>` 优先；单一职责，一个组件一个文件。
 2. **imports 顺序:** vue → vue-router → element-plus → @element-plus/icons-vue → dayjs → 相对组件/素材/mock。
-3. **mock 数据:** `mock/modules/{slug}.js`，Promise + setTimeout 模拟异步；语义化 key；主列表 ≥ 10 条。
+3. **mock 数据:** `mock/modules/{slug}.js`，Promise + setTimeout 模拟异步；语义化 key；主列表 ≥ 10 条。Mock 必须覆盖页面所有数据驱动区域（见 Step 1 清单）。字段类型要真实多样：日期用 `'2025-09-01'`/`'2025-09-10 14:30'` 格式、金额用数字带小数、百分比用 0-100 数值、状态枚举值与 constants.js 对齐。禁止在 `.vue` template 中硬编码本应来自 mock 的数据——下拉选项、KPI 数字、详情文本、表格行数据一律走 mock 或 constants。
 4. **常量:** `views/{slug}/js/constants.js`，全大写+下划线。
 5. **图标:** `import { Search } from '@element-plus/icons-vue'`；`<el-icon :size="20"><Search /></el-icon>`。
 6. **反馈:** `ElMessage` 轻提示；`ElMessageBox.confirm` 危险操作；`v-loading`；`el-empty` 空态。

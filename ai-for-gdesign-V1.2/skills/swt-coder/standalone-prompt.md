@@ -34,5 +34,14 @@
 6. `v-for` 有 `:key`；`v-if` 不与 `v-for` 同标签
 7. import 顺序：vue → vue-router → element-plus → @element-plus/icons-vue → dayjs → 相对路径
 
+## Mock 数据规范
+- **主列表 ≥ 10 条**，字段覆盖所有 table-column prop（日期、金额、百分比、操作人等多类型）
+- **下拉/选择器 options** 必须来自 mock 或 constants，禁止 template 硬编码
+- **KPI/统计卡片** 数值来自 mock，禁止写死数字
+- **详情/抽屉/弹窗** 展示的字段来自 `fetchDetail` mock 返回
+- **状态枚举** value/label/tagType 三元组放 constants.js，mock 数据与之对齐
+- **分页** mock 返回 `{ data, total }`
+- 日期格式 `'2025-09-01'`/`'2025-09-10 14:30'`，金额数字带小数，进度 0-100
+
 ## 输出
 一组 .vue SFC 文件 + mock 数据文件，可直接拷入 Vue 3 + Element Plus + Vite 工程。
