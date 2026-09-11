@@ -107,7 +107,7 @@ init 时指定：`node scripts/init.mjs "<folder>" "<slug>" --ui-library=element
 ### Input Type 1: Text — 页面描述
 1. **Analyze intent:** 场景、用户、核心问题。
 2. **Expand completeness:** 生产级同类页面必须有什么。
-3. **Decompose:** 拆成页面主组件 + 子组件，**颗粒度尽可能小**。**index.vue 只做组合层**。
+3. **Decompose:** 拆成页面主组件 + 子组件，**颗粒度适中：每页组件文件 ≤6**（过度拆分 = 更多文件往返 = 生成更慢）。**index.vue 只做组合层**。
 4. **Macro layout:** `el-container` 外壳或单栏内容页。
 
 ### Input Type 2: Image / Screenshot
@@ -132,21 +132,18 @@ node scripts/init.mjs "{artifact-folder}" "{slug}" --ui-library=element-plus
 成功输出 `RESULT: OK` + `HTML_PATH` + `SRC_DIR` + `PAGE` + `ASSETS_ROOT` + `UI_LIBRARY` + `COMPONENTS`。
 
 ### Step 3 — Author .vue Files
-1. `views/{slug}/index.vue` — 只做组合层。
-2. 子组件放 `views/{slug}/components/*.vue`；跨页复用放 `src/components/`。
-3. 常量放 `views/{slug}/js/constants.js`；复杂逻辑抽 composable。
-4. **组件匹配优先**：若 `--with-components` 开启，检查 `references/component-catalog.md` 是否有匹配的已定义组件 → 直接 import。
-5. Mock API 放 `mock/modules/{slug}.js`。
+1. **并行写文件（性能硬规则）**：先把全部文件构思完，再在**同一条消息里并行发出所有 Write 调用**；严禁写一个文件、等一次结果、再写下一个 —— 每多一轮串行往返，用户就多等一次完整模型生成。
+2. `views/{slug}/index.vue` — 只做组合层。
+3. 子组件放 `views/{slug}/components/*.vue`；跨页复用放 `src/components/`。
+4. 常量放 `views/{slug}/js/constants.js`；复杂逻辑抽 composable。
+5. **组件匹配优先**：若 `--with-components` 开启，检查 `references/component-catalog.md` 是否有匹配的已定义组件 → 直接 import。
+6. Mock API 放 `mock/modules/{slug}.js`。
 
-### Step 3.5 — 生成前自检（MANDATORY）
-1. 相对 import 路径层级正确
-2. 图标名 / el-* 组件名 / token 名精确匹配
-3. PascalCase / kebab-case 组件标签都有对应 import
-4. `<style lang="less">` 内无 `:root` / `[data-swt-theme]` / `--color-*:` 定义
-5. 裸 import 仅限白名单
-6. `v-for` 有 `:key`；`v-if` 不与 `v-for` 同标签
-7. 无静态内联 `style="..."`
-8. CSS 单位用 rem
+### Step 3.5 — 生成前自检（只查机器查不了的）
+**以下 build.mjs 已机器校验，不要人工复查**：相对 import 路径解析、图标/el-*/token 名、裸依赖白名单、`:root`/`[data-swt-theme]`/`--color-*` 定义、px 与静态内联 style（WARN）。人工自检仅限：
+1. `v-for` 有 `:key`；`v-if` 不与 `v-for` 同标签
+2. NEVER sparse：无占位文本、无空区块、数据用满
+3. `:style` 仅用于运行时动态值
 
 ### Step 4 — Verify（MANDATORY）
 ```
@@ -165,9 +162,9 @@ node scripts/build.mjs --dir "{artifact-folder}/{slug}"
 ## 页面代码规范
 
 0. **布局选型:** B端控制台(`el-container`) / 列表页(标题→筛选→表格→分页) / 看板页(KPI行→图表区) / 内容页(单栏)
-1. **组件写法:** `<script setup>` 优先；单一职责，一个组件一个文件。
+1. **组件写法:** `<script setup>` 优先；单一职责，一个组件一个文件；每页组件文件 ≤6（过度拆分拖慢生成）。
 2. **imports 顺序:** vue → vue-router → element-plus → @element-plus/icons-vue → dayjs → 相对组件/素材/mock。
-3. **mock 数据:** `mock/modules/{slug}.js`，Promise + setTimeout 模拟异步；语义化 key；主列表 ≥ 10 条。
+3. **mock 数据:** `mock/modules/{slug}.js`，Promise + setTimeout 模拟异步；语义化 key；主列表 ≥ 10 条 — **紧凑元组数组 + `.map()` 展开，禁止逐条手写完整对象字面量**（token 翻倍、生成更慢）。
 4. **常量:** `views/{slug}/js/constants.js`，全大写+下划线。
 5. **图标:** `import { Search } from '@element-plus/icons-vue'`；`<el-icon :size="20"><Search /></el-icon>`。
 6. **反馈:** `ElMessage` 轻提示；`ElMessageBox.confirm` 危险操作；`v-loading`；`el-empty` 空态。

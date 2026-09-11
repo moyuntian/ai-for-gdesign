@@ -217,21 +217,28 @@ const FILTER_OPTIONS = {
   ],
 }
 
-// ---- 主列表数据（≥10 条，字段类型多样）----
-const mockData = [
-  { id: 1, name: '${pageName}-前端优化方案', status: 'running', department: 'dev', owner: '张明', createdAt: '2025-09-01 09:30', updatedAt: '2025-09-10 14:20', amount: 12500.00, progress: 85, priority: 'high' },
-  { id: 2, name: '${pageName}-后端服务迁移', status: 'stopped', department: 'dev', owner: '李华', createdAt: '2025-08-25 10:00', updatedAt: '2025-09-08 16:45', amount: 38000.00, progress: 40, priority: 'medium' },
-  { id: 3, name: '${pageName}-数据库扩容', status: 'pending', department: 'ops', owner: '王强', createdAt: '2025-09-05 11:15', updatedAt: '2025-09-09 09:00', amount: 7500.00, progress: 0, priority: 'high' },
-  { id: 4, name: '${pageName}-UI 组件库升级', status: 'running', department: 'design', owner: '赵芳', createdAt: '2025-08-20 14:00', updatedAt: '2025-09-10 11:30', amount: 6200.00, progress: 60, priority: 'low' },
-  { id: 5, name: '${pageName}-监控告警系统', status: 'idle', department: 'ops', owner: '刘伟', createdAt: '2025-09-02 08:45', updatedAt: '2025-09-07 17:00', amount: 18000.00, progress: 100, priority: 'medium' },
-  { id: 6, name: '${pageName}-用户权限重构', status: 'running', department: 'dev', owner: '陈静', createdAt: '2025-08-28 13:20', updatedAt: '2025-09-10 15:00', amount: 24000.00, progress: 55, priority: 'high' },
-  { id: 7, name: '${pageName}-API 网关部署', status: 'maintenance', department: 'ops', owner: '杨光', createdAt: '2025-09-03 10:30', updatedAt: '2025-09-09 14:00', amount: 15500.00, progress: 30, priority: 'medium' },
-  { id: 8, name: '${pageName}-产品需求评审', status: 'pending', department: 'product', owner: '周婷', createdAt: '2025-09-06 09:00', updatedAt: '2025-09-08 12:00', amount: 0, progress: 0, priority: 'low' },
-  { id: 9, name: '${pageName}-性能压测方案', status: 'running', department: 'dev', owner: '吴磊', createdAt: '2025-08-30 15:45', updatedAt: '2025-09-10 10:15', amount: 9800.00, progress: 70, priority: 'high' },
-  { id: 10, name: '${pageName}-日志分析平台', status: 'stopped', department: 'ops', owner: '孙超', createdAt: '2025-08-22 16:00', updatedAt: '2025-09-05 11:00', amount: 21000.00, progress: 25, priority: 'medium' },
-  { id: 11, name: '${pageName}-设计规范文档', status: 'running', department: 'design', owner: '林雪', createdAt: '2025-09-04 14:30', updatedAt: '2025-09-10 09:45', amount: 3200.00, progress: 90, priority: 'low' },
-  { id: 12, name: '${pageName}-安全审计整改', status: 'pending', department: 'dev', owner: '郑刚', createdAt: '2025-09-07 10:00', updatedAt: '2025-09-09 16:30', amount: 45000.00, progress: 0, priority: 'high' },
+// ---- 主列表数据（≥10 条；紧凑元组 + map 展开，勿逐条写完整对象字面量）----
+// 元组: [name, status, department, owner, createdAt, updatedAt, amount, progress, priority]
+const ROWS = [
+  ['前端优化方案', 'running', 'dev', '张明', '2025-09-01 09:30', '2025-09-10 14:20', 12500, 85, 'high'],
+  ['后端服务迁移', 'stopped', 'dev', '李华', '2025-08-25 10:00', '2025-09-08 16:45', 38000, 40, 'medium'],
+  ['数据库扩容', 'pending', 'ops', '王强', '2025-09-05 11:15', '2025-09-09 09:00', 7500, 0, 'high'],
+  ['UI 组件库升级', 'running', 'design', '赵芳', '2025-08-20 14:00', '2025-09-10 11:30', 6200, 60, 'low'],
+  ['监控告警系统', 'idle', 'ops', '刘伟', '2025-09-02 08:45', '2025-09-07 17:00', 18000, 100, 'medium'],
+  ['用户权限重构', 'running', 'dev', '陈静', '2025-08-28 13:20', '2025-09-10 15:00', 24000, 55, 'high'],
+  ['API 网关部署', 'maintenance', 'ops', '杨光', '2025-09-03 10:30', '2025-09-09 14:00', 15500, 30, 'medium'],
+  ['产品需求评审', 'pending', 'product', '周婷', '2025-09-06 09:00', '2025-09-08 12:00', 0, 0, 'low'],
+  ['性能压测方案', 'running', 'dev', '吴磊', '2025-08-30 15:45', '2025-09-10 10:15', 9800, 70, 'high'],
+  ['日志分析平台', 'stopped', 'ops', '孙超', '2025-08-22 16:00', '2025-09-05 11:00', 21000, 25, 'medium'],
+  ['设计规范文档', 'running', 'design', '林雪', '2025-09-04 14:30', '2025-09-10 09:45', 3200, 90, 'low'],
+  ['安全审计整改', 'pending', 'dev', '郑刚', '2025-09-07 10:00', '2025-09-09 16:30', 45000, 0, 'high'],
 ]
+
+const mockData = ROWS.map(([name, status, department, owner, createdAt, updatedAt, amount, progress, priority], i) => ({
+  id: i + 1,
+  name: \`${pageName}-\${name}\`,
+  status, department, owner, createdAt, updatedAt, amount, progress, priority,
+}))
 
 // ---- KPI/统计 mock ----
 const mockKpi = {
@@ -500,10 +507,13 @@ if (assetsRoot && existsSync(assetsRoot)) {
     cpSync(tokensSrc, tokensDest, { recursive: true });
   }
 
-  // Copy references (design specs, component catalog, etc.)
-  const refsSrc = join(assetsRoot, 'references');
-  if (existsSync(refsSrc)) {
-    cpSync(refsSrc, join(dest, 'references'), { recursive: true });
+  // Copy references (design specs, component catalog, etc.) — opt-in via --with-references
+  // Default OFF: generated code packages stay clean (specs live in the skill/assets package)
+  if (hasFlag('with-references')) {
+    const refsSrc = join(assetsRoot, 'references');
+    if (existsSync(refsSrc)) {
+      cpSync(refsSrc, join(dest, 'references'), { recursive: true });
+    }
   }
 
   // Copy components for component matching
