@@ -1,6 +1,6 @@
 ---
 name: swt-coder
-description: Generate Vue 3 + Element Plus / SweetUI pages from text, screenshots, or HTML. Uses Less + rem + Vue Router + SWT token system (--swt-*). Delivers .vue SFC source + zero-build offline preview (index.swt.html). Triggers on "页面生成", "Vue 页面", "Element Plus", "SweetUI", "看板", "列表", "截图转码", "dashboard".
+description: Generate Vue 3 + Element Plus / SweetUI pages from text, screenshots, or HTML. Uses Less + rem + Vue Router + g-design-enterprise token system (--color-*). Delivers .vue SFC source + zero-build offline preview (index.swt.html). Triggers on "页面生成", "Vue 页面", "Element Plus", "SweetUI", "看板", "列表", "截图转码", "dashboard".
 ---
 
 # SWT Coder — Vue 3 + Element Plus / SweetUI 页面生成（.vue 源码交付）
@@ -13,9 +13,13 @@ Your product is **真实 Vue 源码**：一组 `.vue` SFC 文件（`<script setu
 - **框架**: Vue 3 (`<script setup>` Composition API)
 - **UI**: Element Plus 2.13.5（默认）/ SweetUI（预留，`--ui-library=sweetui` 切换）
 - **路由**: Vue Router 4.x
-- **样式**: Less + CSS 变量（`var(--swt-*)` token 体系）
+- **样式**: Less + CSS 变量（`var(--color-*)` token 体系，来源 g-design-enterprise）
 - **单位**: rem（根字体 10px，`px / 10 = rem`）
 - **依赖白名单**: vue / vue-router / element-plus / @element-plus/icons-vue / dayjs / less（SweetUI 启用时: + @hw-seq/sweet-ui-base）
+
+## Token 来源
+
+Token 来自 `assets/g-design-enterprise-v1.3.0/tokens/`，init.mjs 自动复制到工作区 `src/assets/themes/tokens/`。AI 生成代码直接用 `var(--color-*)` 前缀，不使用其他前缀。
 
 ## Session Context Caching
 
@@ -37,7 +41,7 @@ init 时指定：`node scripts/init.mjs "<folder>" "<slug>" --ui-library=element
 
 ## 组件库引入（默认开启）
 
-`--with-components`（默认）：从 `components/` 目录读取已定义组件，匹配页面需求时直接 import 组件源码（CV），节省时间，不重复造轮子。未匹配的 UI 块 → AI 自由编写。
+`--with-components`（默认）：从 assets 包复制已定义组件到工作区 `src/components/`，匹配页面需求时直接 import 组件源码（CV），节省时间，不重复造轮子。未匹配的 UI 块 → AI 自由编写。
 `--without-components`：不引入组件库，纯 AI 生成。
 
 ## Output Contract (READ FIRST)
@@ -46,21 +50,24 @@ init 时指定：`node scripts/init.mjs "<folder>" "<slug>" --ui-library=element
 
 ```
 {slug}/
-├── mock/modules/{slug}.js          # Mock API（init 必建）
-├── public/library/                 # 预览运行时 UMD（FIXED — 勿改勿删）
-├── src/                            # ★ 交付件
+├── mock/modules/{slug}.js          # Mock API
+├── public/library/                 # 预览运行时 UMD（FIXED）
+├── references/                     # ★ 从 assets 包复制（规范文件，AI 按需读取）
+├── src/
 │   ├── main.js                     # 工程入口（FIXED）
 │   ├── App.vue                     # 应用壳（FIXED）
-│   ├── README.md                   # 接入说明（FIXED）
-│   ├── assets/                     # 主题/字体/样式（FIXED）
-│   │   ├── fonts/ style/ themes/
-│   │   ├── images/ uploads/        # 按需创建素材
-│   ├── locales/                    # 全局 i18n（init 必建）
-│   ├── router/index.js             # 路由（init 必建）
-│   ├── views/{slug}/               # ★ 页面主目录
+│   ├── assets/
+│   │   ├── themes/
+│   │   │   ├── base.css            # 字体/rem/骨架（FIXED）
+│   │   │   ├── swt-default.css     # 主题入口（FIXED）
+│   │   │   └── tokens/             # ★ 从 assets 包复制（g-design-enterprise clean copy）
+│   │   ├── fonts/ style/ images/
+│   ├── components/                 # ★ 从 assets 包复制（组件匹配用）
+│   ├── locales/                    # i18n
+│   ├── router/index.js
+│   ├── views/{slug}/
 │   │   ├── index.vue               # 页面主组件
 │   │   └── js/constants.js         # 页面常量
-│   ├── components/                 # 跨页共享组件（按需创建）
 │   ├── api/ composables/ constants/ directives/ stores/ utils/
 ├── index.swt.html                  # 离线预览加载器（FIXED）
 └── preview-data.js                 # 源码映射（build 自动生成）
@@ -68,34 +75,34 @@ init 时指定：`node scripts/init.mjs "<folder>" "<slug>" --ui-library=element
 
 **Editable vs FIXED:**
 - **You edit ONLY:** `views/**`、`components/**`、`api/**`、`composables/**`、`constants/**`、`directives/**`、`locales/**`、`router/**`、`stores/**`、`utils/**`、`mock/**`、`assets/uploads/`、`assets/images/`。
-- **FIXED:** `main.js`、`App.vue`、`assets/themes/`、`assets/style/`、`public/`、`index.swt.html`、`preview-data.js`。
+- **FIXED:** `main.js`、`App.vue`、`assets/themes/base.css`、`assets/themes/swt-default.css`、`assets/themes/tokens/`、`public/`、`index.swt.html`、`preview-data.js`、`references/`。
 
 **HARD RULES:**
-- 标准 ESM import；裸依赖白名单仅限上述六项（+ element-plus 子路径 / @hw-seq/sweet-ui-base 子路径）。
+- 标准 ESM import；裸依赖白名单仅限上述六项。
 - 组件用 `<script setup>` + Composition API。
-- 颜色一律 `var(--swt-*)` token；UI 组件用语义 `type` prop。
+- 颜色一律 `var(--color-*)` token；UI 组件用语义 `type` prop。
 - `<style lang="less" scoped>`；**禁止内联 `style="..."`**（`:style` 动态绑定允许）。
 - **CSS 单位用 rem**（`px / 10 = rem`）。
-- 禁止在 SFC 样式里定义 `:root`、`[data-swt-theme]`、`--swt-*`（页面局部变量用 `--page-*` 前缀）。
+- 禁止在 SFC 样式里定义 `:root`、`[data-swt-theme]`、`--color-*`（页面局部变量用 `--page-*` 前缀）。
 
 ## 换肤系统
 
 - 页面消费 token → 任何皮肤下自动跟随。
 - 运行时切换：`document.documentElement.setAttribute('data-swt-theme', '<name>')`。
-- 深色模式：`assets/style/theme/dark.less` 已定义 `html[data-swt-theme="dark"]` 下的 token 覆盖。
+- 深色模式：`assets/style/theme/dark.less` 已定义深色 token 覆盖。
 
 ## How to Use This Skill
 
 ### Input Type 1: Text — 页面描述
 1. **Analyze intent:** 场景、用户、核心问题。
 2. **Expand completeness:** 生产级同类页面必须有什么。
-3. **Decompose:** 拆成页面主组件 + 子组件，**颗粒度尽可能小**——一个子组件一个 .vue 文件。**index.vue 只做组合层**。
+3. **Decompose:** 拆成页面主组件 + 子组件，**颗粒度尽可能小**。**index.vue 只做组合层**。
 4. **Macro layout:** `el-container` 外壳或单栏内容页。
 
 ### Input Type 2: Image / Screenshot
 1. 分析布局、组件、层级、视觉分区。
-2. 映射到 Element Plus + SWT token。
-3. **保真优先**：行数列数与图片完全一致，逐格独立读取。
+2. 映射到 Element Plus + `--color-*` token。
+3. **保真优先**：行数列数与图片完全一致。
 
 ### Input Type 3: Raw HTML
 解析 DOM/CSS → 映射 Element Plus 组件，颜色映射最近似 token。
@@ -107,21 +114,11 @@ init 时指定：`node scripts/init.mjs "<folder>" "<slug>" --ui-library=element
 ### Step 1 — 布局策略 & Generative Expansion
 NEVER sparse：用尽全部数据、mock 真实文本、CTA、搜索/筛选/分页、状态标签等视觉语义。
 
-**Mock 数据覆盖清单（逐项检查，缺一即不完整）：**
-- **主列表/表格：** ≥ 10 条真实业务记录，字段覆盖所有 `el-table-column` 的 prop（含日期、金额、百分比、操作人等多类型字段）。
-- **下拉/选择器：** `el-select`/`el-cascader`/`el-radio-group`/`el-checkbox-group` 的 options **必须来自 mock 或 constants.js**，禁止在 template 里写死 `el-option` 硬编码列表。
-- **KPI/统计卡片：** 看板页的数值、趋势、百分比、环比同比数据必须来自 mock，禁止写死数字。
-- **状态/标签映射：** 状态枚举及对应的 `el-tag` type 映射放 constants.js，mock 数据中的 status 字段值与此枚举对齐。
-- **详情/抽屉/弹窗：** `el-drawer`/`el-dialog` 中展示的详情字段必须来自 `fetchDetail` mock 返回，禁止在模板里硬编码详情文本。
-- **Tab 页签：** `el-tab-pane` 若有独立列表数据，每个 tab 对应一组 mock 数据。
-- **分页：** mock 返回 `{ data, total }`，`el-pagination` 的 total 绑定到响应值。
-- **时间线/步骤/进度：** 时间线节点、步骤条数据、进度条数值均来自 mock。
-
 ### Step 2 — Init Workspace（MANDATORY）
 ```
 node scripts/init.mjs "{artifact-folder}" "{slug}" --ui-library=element-plus
 ```
-成功输出 `RESULT: OK` + `HTML_PATH` + `SRC_DIR` + `PAGE` + `UI_LIBRARY` + `COMPONENTS`。
+成功输出 `RESULT: OK` + `HTML_PATH` + `SRC_DIR` + `PAGE` + `ASSETS_ROOT` + `UI_LIBRARY` + `COMPONENTS`。
 
 ### Step 3 — Author .vue Files
 1. `views/{slug}/index.vue` — 只做组合层。
@@ -134,7 +131,7 @@ node scripts/init.mjs "{artifact-folder}" "{slug}" --ui-library=element-plus
 1. 相对 import 路径层级正确
 2. 图标名 / el-* 组件名 / token 名精确匹配
 3. PascalCase / kebab-case 组件标签都有对应 import
-4. `<style lang="less">` 内无 `:root` / `[data-swt-theme]` / `--swt-*:` 定义
+4. `<style lang="less">` 内无 `:root` / `[data-swt-theme]` / `--color-*:` 定义
 5. 裸 import 仅限白名单
 6. `v-for` 有 `:key`；`v-if` 不与 `v-for` 同标签
 7. 无静态内联 `style="..."`
@@ -147,14 +144,10 @@ node scripts/build.mjs --dir "{artifact-folder}/{slug}"
 - **Success:** `OK index.swt.html verified (N pages, M components, K el-tag uses)`
 - **Failure:** `RESULT: FAIL | <文件>: <原因>` → 修复 → 重跑（最多 3 次）
 
-### Step 5 — Output & Preview
+### Step 5 — Output
 ```
 <artifact type="text/link">{HTML_PATH value}</artifact>
 ```
-
-**预览方式（二选一）：**
-- **方式 A — HTTP 预览（推荐，功能完整）：** 运行 `node scripts/serve.mjs --dir "{artifact-folder}/{slug}"`，浏览器打开 `http://127.0.0.1:8765/index.swt.html`。
-- **方式 B — 双击 file:// 打开（备选，部分浏览器受限）：** 直接双击 `index.swt.html`。Chromium 内核浏览器（Chrome/Edge）对 `file://` 协议有安全限制（unique security origin），可能导致 vue3-sfc-loader 编译模块时失败。如遇白屏或安全错误，请改用方式 A。Firefox 可通过 `about:config` 设置 `security.fileuri.strict_origin_policy=false` 解除限制。
 
 ---
 
@@ -163,11 +156,11 @@ node scripts/build.mjs --dir "{artifact-folder}/{slug}"
 0. **布局选型:** B端控制台(`el-container`) / 列表页(标题→筛选→表格→分页) / 看板页(KPI行→图表区) / 内容页(单栏)
 1. **组件写法:** `<script setup>` 优先；单一职责，一个组件一个文件。
 2. **imports 顺序:** vue → vue-router → element-plus → @element-plus/icons-vue → dayjs → 相对组件/素材/mock。
-3. **mock 数据:** `mock/modules/{slug}.js`，Promise + setTimeout 模拟异步；语义化 key；主列表 ≥ 10 条。Mock 必须覆盖页面所有数据驱动区域（见 Step 1 清单）。字段类型要真实多样：日期用 `'2025-09-01'`/`'2025-09-10 14:30'` 格式、金额用数字带小数、百分比用 0-100 数值、状态枚举值与 constants.js 对齐。禁止在 `.vue` template 中硬编码本应来自 mock 的数据——下拉选项、KPI 数字、详情文本、表格行数据一律走 mock 或 constants。
+3. **mock 数据:** `mock/modules/{slug}.js`，Promise + setTimeout 模拟异步；语义化 key；主列表 ≥ 10 条。
 4. **常量:** `views/{slug}/js/constants.js`，全大写+下划线。
 5. **图标:** `import { Search } from '@element-plus/icons-vue'`；`<el-icon :size="20"><Search /></el-icon>`。
 6. **反馈:** `ElMessage` 轻提示；`ElMessageBox.confirm` 危险操作；`v-loading`；`el-empty` 空态。
-7. **样式:** `<style lang="less" scoped>`，类名简短功能命名，颜色用 token。Less 嵌套 ≤ 3 层。
+7. **样式:** `<style lang="less" scoped>`，类名简短功能命名，颜色用 `var(--color-*)`。Less 嵌套 ≤ 3 层。
 8. **表格:** `el-table` + `el-table-column`；`<template #default="{ row }">`；操作列 `fixed="right"` ≤3 按钮。
 9. **相对路径:** 从 `views/{slug}/index.vue` 引用：
    - 子组件: `import X from './components/X.vue'`
@@ -179,18 +172,20 @@ node scripts/build.mjs --dir "{artifact-folder}/{slug}"
 
 ## 附录 A — 速查表
 
-### Token 速查（var(--swt-\*)）
+### Token 速查（var(--color-\*)）
 
 ```
-主色:  --swt-color-primary  -hover  -active  -on-primary
-功能色: --swt-color-success  -warning  -danger  -error  -info
-文本色: --swt-text-1  -2  -3  -4  -disabled  -inverse
-背景色: --swt-bg-page  -container  -overlay  -hover  -fill
-边框色: --swt-border-1  -2
-其他:   --swt-mask  --swt-shadow-1  -2  -3  --swt-radius-sm  -md  -lg  -full
-完整色: --swt-color-accent-normal  --swt-color-brand-normal  --swt-color-function-*
-间距:   --swt-space-size-4  -8  -12  -16  -20  -24  -32
+主色:   --color-brand  -hover  -focus  -active  -disabled
+功能色: --color-error  -alert  -warning  -success  -info  -none  + -subtle 变体
+文本色: --color-text-primary  -secondary  -placeholder  -disabled  -inverse
+图标色: --color-icon-primary  -secondary  -tertiary  -placeholder  -disabled  -inverse  -hover  -focus  -active
+背景色: --color-bg-1(页面)  -2(容器)  -3  -4  -5(卡片)  -6  -mask
+填充色: --color-hover  -select  -table-header  -table-zebra  -fill  -fill-subtle  -fill-disabled  -fill-disabled-subtle
+边框色: --color-border  -hover  -focus  -disabled  -separator  -separator-subtle
+阴影:   --g-shadow
+组件:   --g-control-height(32px)  --g-control-radius(4px)  --g-table-header-height(40px)  --g-table-row-height(44px)
 ```
+> 完整 Token 文档见 `references/design_system.md`。来源：`assets/g-design-enterprise-v1.3.0/tokens/`。
 
 ### 常用 el-* 组件（build 校验白名单）
 ```
@@ -210,13 +205,12 @@ el-row el-col el-card el-tabs el-tab-pane el-tooltip el-dropdown
 | 2 | `<el-table-cloumn>` | `<el-table-column>` |
 | 3 | `<StatusTag />` 没 import | 加 import |
 | 4 | 路径少一级 | 检查相对路径层级 |
-| 5 | `var(--swt-color-blue)` | `var(--swt-color-primary)` |
-| 6 | style 内 `:root { --swt-x }` | token 在 themes/ |
+| 5 | `var(--color-blue)` | `var(--color-brand)` |
+| 6 | style 内 `:root { --color-x }` | token 在 themes/tokens/ |
 | 7 | `style="color: red"` | class + style |
 | 8 | `padding: 16px` | `padding: 1.6rem` |
 
 ## References
-- **[references/design_system.md](references/design_system.md)** — Token 全表、换肤协议、布局规范、ICT 最佳实践
+- **[references/design_system.md](references/design_system.md)** — Token 全表、间距、圆角、阴影、字体、图表配色、代码高亮
 - **[references/element-plus-guide.md](references/element-plus-guide.md)** — EP 组件要点、错误预防
 - **[references/sweetui-guide.md](references/sweetui-guide.md)** — SweetUI 差异指南（待 UMD）
-- **[references/component-catalog.md](references/component-catalog.md)** — 已定义组件目录

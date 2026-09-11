@@ -1,6 +1,6 @@
-# SWT Design System
+﻿# SWT Design System
 
-页面一切颜色经由 **SWT token**（`--swt-*` CSS 变量）表达。token 由皮肤（`src/assets/themes/`）提供，经 `swt-bridge.css` 桥接到 Element Plus（`--el-*`）。
+页面一切颜色经由 **SWT token**（`--color-*` CSS 变量）表达。token 由皮肤（`src/assets/themes/`）提供，经 `swt-bridge.css` 桥接到 Element Plus（`--el-*`）。
 
 ## 1. Token 全表
 
@@ -8,64 +8,64 @@
 
 | Token | 用途 |
 |-------|------|
-| `--swt-color-accent-normal` | 高亮色/交互元素正常状态（#0067D1） |
-| `--swt-color-accent-hover` / `-active` / `-focus` | hover / 按下 / 获焦 |
-| `--swt-color-accent-text-normal` | 文本场景高亮色 |
-| `--swt-color-brand-normal` | 品牌色（#C7000B） |
-| `--swt-color-brand-hover` / `-active` | 品牌色 hover / 按下 |
+| `--color-brand` | 高亮色/交互元素正常状态（#0067D1） |
+| `--color-brand-hover` / `-active` / `-focus` | hover / 按下 / 获焦 |
+| `--color-brand-text-normal` | 文本场景高亮色 |
+| `--color-brand` | 品牌色（#C7000B） |
+| `--color-brand-hover` / `-active` | 品牌色 hover / 按下 |
 
 ### 功能色
 
 | Token | 用途 |
 |-------|------|
-| `--swt-color-function-urgent-normal` | 紧急/错误/危险 |
-| `--swt-color-function-important-normal` | 重要 |
-| `--swt-color-function-warning-normal` | 警告 |
-| `--swt-color-function-success-normal` | 成功/正常 |
-| `--swt-color-function-prompt-normal` | 提示/运行中 |
-| `--swt-color-function-*-background` | 对应浅色背景 |
+| `--color-error` | 紧急/错误/危险 |
+| `--color-alert-normal` | 重要 |
+| `--color-warning` | 警告 |
+| `--color-success` | 成功/正常 |
+| `--color-info` | 提示/运行中 |
+| `--color-color-function-*-background` | 对应浅色背景 |
 
 ### 文本色
 
 | Token | 用途 |
 |-------|------|
-| `--swt-text-1` / `--swt-color-text-primary` | 主标题、正文重点 |
-| `--swt-text-2` / `--swt-color-text-secondary` | 常规正文 |
-| `--swt-text-3` / `--swt-color-text-placeholder` | 次要说明、占位符 |
-| `--swt-text-disabled` | 禁用态文字 |
-| `--swt-text-inverse` | 深色底上的反白文字 |
+| `--color-text-primary` / `--color-text-primary` | 主标题、正文重点 |
+| `--color-text-secondary` / `--color-text-secondary` | 常规正文 |
+| `--color-text-placeholder` / `--color-text-placeholder` | 次要说明、占位符 |
+| `--color-text-disabled` | 禁用态文字 |
+| `--color-text-inverse` | 深色底上的反白文字 |
 
 ### 背景色
 
 | Token | 用途 |
 |-------|------|
-| `--swt-bg-page` / `--swt-color-bg-secondary` | 页面 body 底色 |
-| `--swt-bg-container` / `--swt-color-bg-primary` | 卡片、面板容器底 |
-| `--swt-bg-overlay` | 浮层底 |
-| `--swt-bg-hover` | 行/项 hover 底 |
-| `--swt-bg-fill` | 填充底（输入框、禁用底） |
+| `--color-bg-1` / `--color-bg-1` | 页面 body 底色 |
+| `--color-bg-2` / `--color-bg-2` | 卡片、面板容器底 |
+| `--color-bg-4` | 浮层底 |
+| `--color-hover` | 行/项 hover 底 |
+| `--color-fill` | 填充底（输入框、禁用底） |
 
 ### 边框 / 阴影 / 圆角 / 间距
 
 | Token | 用途 |
 |-------|------|
-| `--swt-border-1` | 分割线 |
-| `--swt-border-2` | 控件描边 |
-| `--swt-shadow-1` / `-2` / `-3` | 卡片 / 弹窗 / 最高层浮层阴影 |
-| `--swt-radius-sm` / `-md` / `-lg` / `-full` | 控件 / 卡片 / 大容器 / 胶囊圆角 |
-| `--swt-space-size-4` ~ `-80` | 间距体系（4px 倍数） |
+| `--color-border-separator` | 分割线 |
+| `--color-border` | 控件描边 |
+| `--g-shadow` / `-2` / `-3` | 卡片 / 弹窗 / 最高层浮层阴影 |
+| `--g-control-radius` / `-md` / `-lg` / `-full` | 控件 / 卡片 / 大容器 / 胶囊圆角 |
+| `--g-space-size-4` ~ `-80` | 间距体系（4px 倍数） |
 
 ### 简化别名（AI 高频使用）
 
 | Token | 等价 |
 |-------|------|
-| `--swt-color-primary` | `--swt-color-accent-normal` |
-| `--swt-color-success` | `--swt-color-function-success-normal` |
-| `--swt-color-danger` | `--swt-color-function-urgent-normal` |
-| `--swt-color-warning` | `--swt-color-function-warning-normal` |
+| `--color-brand` | `--color-brand` |
+| `--color-success` | `--color-success` |
+| `--color-error` | `--color-error` |
+| `--color-warning` | `--color-warning` |
 
 **使用规则：**
-- 一律 `var(--swt-*)`。禁止静态内联 `style="..."`。
+- 一律 `var(--color-*)`。禁止静态内联 `style="..."`。
 - Element Plus 组件优先语义 prop（`type="primary|success|warning|danger|info"`）。
 - 用户明确指定精确颜色时才允许 hex 字面量。
 
@@ -88,11 +88,11 @@
 
 ### ICT 最佳实践（参考 ict-coder 改造）
 - **Tonal Layering（色调分层）：**
-  - Level 0（底色）：`--swt-bg-page`，无阴影。
-  - Level 1（容器）：`--swt-bg-container` + `--swt-shadow-1`，主要内容容器。
-  - Level 2（内部）：`--swt-bg-hover` 或变体色，容器内部分区。
+  - Level 0（底色）：`--color-bg-1`，无阴影。
+  - Level 1（容器）：`--color-bg-2` + `--g-shadow`，主要内容容器。
+  - Level 2（内部）：`--color-hover` 或变体色，容器内部分区。
 - **有阴影无边框（Mutual Exclusion）：** 浮起容器不加结构性 border。
-- **无左侧色条（No Accent Strips）：** 用 `--swt-color-function-*-background` 浅色底替代。
+- **无左侧色条（No Accent Strips）：** 用 `--color-color-function-*-background` 浅色底替代。
 - **语义状态配对：** `*-background` 底色 + 对应 `*-text-normal` 文字色。
 
 ### rem 换算速查
@@ -114,14 +114,14 @@
 
 | Token | 字号 | 用途 |
 |-------|------|------|
-| `--swt-font-size-small` | 12px | 辅助文本 |
-| `--swt-font-size-normal` | 14px | 正文/表格 |
-| `--swt-font-size-normal1` | 16px | 二级标题/卡片标题 |
-| `--swt-font-size-medium` | 20px | 一级标题/页面标题 |
-| `--swt-font-size-big` | 24px | 扩展文本 |
+| `--color-font-size-small` | 12px | 辅助文本 |
+| `--color-font-size-normal` | 14px | 正文/表格 |
+| `--color-font-size-normal1` | 16px | 二级标题/卡片标题 |
+| `--color-font-size-medium` | 20px | 一级标题/页面标题 |
+| `--color-font-size-big` | 24px | 扩展文本 |
 
 字重：light(300) / normal(400) / bold(600)
-字体族：`--swt-font-family-zh`（中文）/ `--swt-font-family-en`（英文）
+字体族：`''HarmonyOS Sans', 'Microsoft YaHei', 'PingFang SC', Arial, sans-serif-zh`（中文）/ `''HarmonyOS Sans', 'Microsoft YaHei', 'PingFang SC', Arial, sans-serif-en`（英文）
 
 ## 5. Element Plus 组件要点
 

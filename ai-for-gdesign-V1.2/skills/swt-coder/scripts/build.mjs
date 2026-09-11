@@ -120,6 +120,10 @@ try {
 function walkFiles(dirPath, exts, out = []) {
   for (const entry of readdirSync(dirPath, { withFileTypes: true })) {
     if (entry.name === 'node_modules' || entry.name.startsWith('.')) continue;
+    // Skip FIXED asset directories (g-design-enterprise copies, not AI deliverables)
+    if (entry.name === 'tokens' && dirPath.endsWith(join('assets', 'themes'))) continue;
+    // Skip src/components/ when it contains g-design-enterprise components (has basic/ subdirs)
+    if (entry.name === 'components' && existsSync(join(dirPath, 'components', 'basic'))) continue;
     const full = join(dirPath, entry.name);
     if (entry.isDirectory()) walkFiles(full, exts, out);
     else if (exts.includes(extname(entry.name))) out.push(full);
@@ -144,7 +148,9 @@ const REQUIRED_HTML = [
   '<script src="./public/library/vue3-sfc-loader.js"></script>',
   '<script src="./public/library/less.min.js"></script>',
   '<link rel="stylesheet" href="./src/assets/themes/base.css">',
-  '<link rel="stylesheet" href="./src/assets/themes/swt-bridge.css">',
+  '<link rel="stylesheet" href="./src/assets/themes/tokens/semantic-light.css">',
+  '<link rel="stylesheet" href="./src/assets/themes/tokens/element-plus.css">',
+  '<link rel="stylesheet" href="./src/assets/themes/swt-default.css">',
   '<script src="./preview-data.js"></script>',
 ];
 for (const line of REQUIRED_HTML) {
@@ -152,7 +158,14 @@ for (const line of REQUIRED_HTML) {
 }
 if (!/<html[^>]*data-swt-theme=/.test(html)) fail('preview loader broken: <html> has no data-swt-theme attribute');
 
-for (const p of ['App.vue', 'main.js', join('assets', 'themes', 'base.css'), join('assets', 'themes', 'swt-bridge.css'), join('assets', 'themes', 'swt-default.css')]) {
+for (const p of [
+  'App.vue', 'main.js',
+  join('assets', 'themes', 'base.css'),
+  join('assets', 'themes', 'swt-default.css'),
+  join('assets', 'themes', 'tokens', 'primitive.css'),
+  join('assets', 'themes', 'tokens', 'semantic-light.css'),
+  join('assets', 'themes', 'tokens', 'element-plus.css'),
+]) {
   if (!existsSync(join(srcDir, p))) fail(`deliverable incomplete, missing: src/${p}`);
 }
 
@@ -309,9 +322,9 @@ for (const file of vueFiles) {
   for (const [i, block] of descriptor.styles.entries()) {
     if (/:root\s*\{/.test(block.content)) fail(`${rel}: <style> #${i + 1} must not define :root (skins live in src/assets/themes/)`);
     if (/data-swt-theme/.test(block.content)) fail(`${rel}: <style> #${i + 1} must not touch [data-swt-theme] (skins live in src/assets/themes/)`);
-    for (const dm of block.content.matchAll(/--swt-[a-z0-9-]+\s*:/g)) {
+    for (const dm of block.content.matchAll(/--color-[a-z0-9-]+\s*:/g)) {
       const tok = dm[0].replace(/\s*:/, '');
-      if (!tok.startsWith('--page-')) fail(`${rel}: <style> #${i + 1} defines "${tok}" : page-local custom props must be prefixed --page- (skin tokens belong in styles/themes/)`);
+      if (!tok.startsWith('--page-')) fail(`${rel}: <style> #${i + 1} defines "${tok}" : page-local custom props must be prefixed --page- (tokens belong in themes/tokens/)`);
     }
     // px usage warning (prefer rem: px / 10 = rem)
     const pxCount = (block.content.match(/\b\d+px\b/g) || []).length;
@@ -366,10 +379,20 @@ try {
 // ---------- 6-7. token usage across styles + templates ----------
 const definedTokens = new Set();
 const cssHaystacks = [];
+// Collect tokens from g-design-enterprise tokens/ directory (FIXED, not scanned by walkFiles)
+const tokensDir = join(srcDir, 'assets', 'themes', 'tokens');
+if (existsSync(tokensDir)) {
+  for (const f of walkFiles(tokensDir, ['.css'])) {
+    const text = readFileSync(f, 'utf8');
+    cssHaystacks.push(text);
+    for (const m of text.matchAll(/(--[a-z][a-z0-9-]+)\s*:/g)) definedTokens.add(m[1]);
+  }
+}
 for (const f of cssFiles) {
   const text = readFileSync(f, 'utf8');
   cssHaystacks.push(text);
-  for (const m of text.matchAll(/--swt-[a-z0-9-]+\s*:/g)) definedTokens.add(m[0].replace(/\s*:/, ''));
+  // Collect all token definitions: --color-*, --el-*, --g-*, --brand-*, --gray-*, etc.
+  for (const m of text.matchAll(/(--[a-z][a-z0-9-]+)\s*:/g)) definedTokens.add(m[1]);
 }
 for (const file of vueFiles) {
   const source = readFileSync(file, 'utf8');
@@ -379,17 +402,18 @@ for (const file of vueFiles) {
     for (const m of block.content.matchAll(/--page-[a-z0-9-]+\s*:/g)) definedTokens.add(m[0].replace(/\s*:/, ''));
     cssHaystacks.push(block.content);
     const hexes = (block.content.match(/#[0-9a-fA-F]{3,8}\b/g) || []).length;
-    if (hexes) warn(`${rel}: ${hexes} hardcoded hex color(s) in <style> : prefer var(--swt-*) tokens`);
+    if (hexes) warn(`${rel}: ${hexes} hardcoded hex color(s) in <style> : prefer var(--color-*) tokens`);
   }
   if (descriptor.template) cssHaystacks.push(descriptor.template.content);
 }
 for (const text of cssHaystacks) {
-  for (const m of text.matchAll(/var\(\s*(--swt-[a-z0-9-]+)\s*,/g)) {
-    // optional token (fallback provided) — e.g. bridge overrides like --swt-color-primary-light-3: skip
+  // Skip tokens with fallback values (e.g. var(--color-bg-1, #f3f3f3))
+  for (const m of text.matchAll(/var\(\s*(--[a-z][a-z0-9-]+)\s*,/g)) {
     continue;
   }
-  for (const m of text.matchAll(/var\(\s*(--swt-[a-z0-9-]+)\s*\)/g)) {
-    if (!definedTokens.has(m[1])) fail(`unknown SWT token var(${m[1]}) : tokens are defined in src/assets/themes/*.css`);
+  // Check tokens without fallback — must be defined somewhere in themes/tokens/
+  for (const m of text.matchAll(/var\(\s*(--[a-z][a-z0-9-]+)\s*\)/g)) {
+    if (!definedTokens.has(m[1])) fail(`unknown token var(${m[1]}) : tokens are defined in src/assets/themes/tokens/*.css`);
   }
 }
 

@@ -1,57 +1,7 @@
-﻿/* ============================================================
-   GTS 皮肤：default（默认亮色皮肤）
-   ============================================================
-   换肤插槽说明（接入自有换肤体系时阅读）：
-   1. 一个皮肤 = 本目录下一个 css 文件，作用域固定为
-      html[data-swt-theme="<皮肤名>"]，文件内定义全部 --swt-* token。
-   2. 在 index.swt.html 的「换肤插槽」注释处追加对应 <link>。
-   3. 运行时切换：document.documentElement.setAttribute("data-swt-theme", "<皮肤名>")。
-   4. 深色皮肤记得覆盖 --swt-mix-base 为深色表面色（见 base.css）。
-   完整 token 清单与协议见同目录 README.md。
-   ============================================================ */
+﻿/* swt-default.css — 默认亮色皮肤入口
+   实际 --color-* 值由 tokens/ 下的 g-design-enterprise 文件提供。
+   本文件只做主题切换入口，不定义颜色值。 */
 
 html[data-swt-theme="default"] {
-  /* ---- 品牌色 ---- */
-  --swt-color-primary: #0067d1;
-  --swt-color-primary-hover: #2e86de;
-  --swt-color-primary-active: #004ea8;
-  --swt-color-on-primary: #ffffff;
-  --swt-color-primary-container: #e6f2fd;
-  --swt-color-on-primary-container: #003d83;
-
-  /* ---- 功能色 ---- */
-  --swt-color-success: #09aa71;
-  --swt-color-warning: #f4840c;
-  --swt-color-danger: #e02128;
-  --swt-color-error: #e02128;
-  --swt-color-info: #777777;
-
-  /* ---- 文本色 ---- */
-  --swt-text-1: #191919;
-  --swt-text-2: #595959;
-  --swt-text-3: #777777;
-  --swt-text-4: #939393;
-  --swt-text-disabled: #c9c9c9;
-  --swt-text-inverse: #ffffff;
-
-  /* ---- 背景色 ---- */
-  --swt-bg-page: #f3f3f3;
-  --swt-bg-container: #ffffff;
-  --swt-bg-overlay: #ffffff;
-  --swt-bg-hover: rgba(25, 25, 25, 0.04);
-  --swt-bg-fill: #f3f3f3;
-
-  /* ---- 边框色 ---- */
-  --swt-border-1: #dfdfdf;
-  --swt-border-2: #c9c9c9;
-
-  /* ---- 遮罩 / 阴影 / 圆角 ---- */
-  --swt-mask: rgba(0, 0, 0, 0.4);
-  --swt-shadow-1: 0 0 6px rgba(0, 0, 0, 0.12);
-  --swt-shadow-2: 0 12px 32px 4px rgba(0, 0, 0, 0.04), 0 8px 20px rgba(0, 0, 0, 0.08);
-  --swt-shadow-3: 0 16px 48px 16px rgba(0, 0, 0, 0.08), 0 12px 32px rgba(0, 0, 0, 0.12);
-  --swt-radius-sm: 4px;
-  --swt-radius-md: 6px;
-  --swt-radius-lg: 8px;
-  --swt-radius-full: 9999px;
+  /* tokens/semantic-light.css 已在 :root 下定义全部 --color-* 值 */
 }

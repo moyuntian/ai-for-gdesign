@@ -1,1 +1,0 @@
-{"id":"g-input","name":"GInput","level":"basic","base":"ElInput","scenarios":["文本录入","搜索"],"states":["focus","disabled","readonly","error"]}

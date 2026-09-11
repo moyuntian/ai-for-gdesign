@@ -1,1 +1,0 @@
-{"id":"g-data-table-pro","name":"GDataTablePro","level":"business","dependencies":["ElTable","ElPagination"],"scenarios":["设备管理","告警管理"],"capabilities":["分页","多选","批量操作","自定义列"]}

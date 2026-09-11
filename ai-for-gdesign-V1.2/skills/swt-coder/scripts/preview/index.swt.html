@@ -16,9 +16,19 @@
     <script src="./public/library/vue3-sfc-loader.js"></script>
     <link rel="stylesheet" href="./public/library/element-plus.index.css">
 
-    <!-- ═══ 2. GTS 主题（样式文件即交付件，位于 src/assets/themes/）═══ -->
+    <!-- ═══ 2. SWT 主题（tokens/ 由 init.mjs 从 assets 包复制）═══ -->
     <link rel="stylesheet" href="./src/assets/themes/base.css">
-    <link rel="stylesheet" href="./src/assets/themes/swt-bridge.css">
+    <link rel="stylesheet" href="./src/assets/themes/tokens/primitive.css">
+    <link rel="stylesheet" href="./src/assets/themes/tokens/semantic-light.css">
+    <link rel="stylesheet" href="./src/assets/themes/tokens/semantic-dark.css">
+    <link rel="stylesheet" href="./src/assets/themes/tokens/component.css">
+    <link rel="stylesheet" href="./src/assets/themes/tokens/components/form.css">
+    <link rel="stylesheet" href="./src/assets/themes/tokens/components/data.css">
+    <link rel="stylesheet" href="./src/assets/themes/tokens/components/overlay.css">
+    <link rel="stylesheet" href="./src/assets/themes/tokens/components/feedback.css">
+    <link rel="stylesheet" href="./src/assets/themes/tokens/charts.css">
+    <link rel="stylesheet" href="./src/assets/themes/tokens/code.css">
+    <link rel="stylesheet" href="./src/assets/themes/tokens/element-plus.css">
     <link rel="stylesheet" href="./src/assets/themes/swt-default.css">
     <!-- ▼▼ 换肤插槽：新皮肤 css 放入 src/assets/themes/ 后在此追加 link ▼▼ -->
     <!-- ▲▲ 换肤插槽结束 ▲▲ -->
@@ -28,9 +38,9 @@
         html { font-size: 10px; }
         html, body, #app { height: 100%; margin: 0; padding: 0; }
         body {
-            font-family: var(--swt-font-family);
-            background: var(--swt-bg-page);
-            color: var(--swt-text-1);
+            font-family: 'HarmonyOS Sans', 'Microsoft YaHei', 'PingFang SC', Arial, sans-serif;
+            background: var(--color-bg-1, #f3f3f3);
+            color: var(--color-text-primary, #191919);
         }
         #swt-boot-error {
             display: none;
@@ -40,9 +50,9 @@
             font-size: 1.3rem;
             font-family: Consolas, monospace;
             white-space: pre-wrap;
-            color: var(--swt-color-danger, #e02128);
-            background: var(--swt-bg-overlay, #fee7e8);
-            border: 0.1rem solid var(--swt-border-1, #f59297);
+            color: var(--color-error, #e02128);
+            background: var(--color-error-subtle, #fee7e8);
+            border: 0.1rem solid var(--color-border, #f59297);
             border-radius: 0.8rem;
         }
     </style>

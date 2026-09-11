@@ -9,8 +9,8 @@
 
    ```css
    html[data-swt-theme="dark"] {
-     --swt-color-primary: #4d9eff;
-     --swt-bg-page: #121212;
+     --color-brand: #4d9eff;
+     --color-bg-1: #121212;
      /* ...全部 token 见下方清单 */
    }
    ```
@@ -28,27 +28,27 @@
 
 | 分组 | Token | 用途 |
 |------|-------|------|
-| 品牌色 | `--swt-color-primary` / `-hover` / `-active` / `--swt-color-on-primary` | 主操作、选中态 |
-| 品牌色 | `--swt-color-primary-container` / `--swt-color-on-primary-container` | 轻量高亮区块（选中列表项、标签底） |
-| 功能色 | `--swt-color-success` / `--swt-color-warning` / `--swt-color-danger` / `--swt-color-error` / `--swt-color-info` | 语义状态 |
-| 文本色 | `--swt-text-1` ~ `--swt-text-4` | 1 主文本 → 4 占位符，层级递弱 |
-| 文本色 | `--swt-text-disabled` / `--swt-text-inverse` | 禁用 / 深底反白 |
-| 背景色 | `--swt-bg-page` / `--swt-bg-container` / `--swt-bg-overlay` | 页面底 / 卡片容器 / 浮层 |
-| 背景色 | `--swt-bg-hover` / `--swt-bg-fill` | 悬停 / 填充（输入框底、禁用底） |
-| 边框色 | `--swt-border-1` / `--swt-border-2` | 分割线 / 控件描边 |
-| 遮罩 | `--swt-mask` | 弹窗遮罩 |
-| 阴影 | `--swt-shadow-1` ~ `--swt-shadow-3` | 卡片 / 弹窗 / 最高层浮层 |
-| 圆角 | `--swt-radius-sm` / `-md` / `-lg` / `-full` | 控件 / 卡片 / 大容器 / 胶囊 |
+| 品牌色 | `--color-brand` / `-hover` / `-active` / `--color-text-inverse` | 主操作、选中态 |
+| 品牌色 | `--color-brand-container` / `--color-text-inverse-container` | 轻量高亮区块（选中列表项、标签底） |
+| 功能色 | `--color-success` / `--color-warning` / `--color-error` / `--color-error` / `--color-info` | 语义状态 |
+| 文本色 | `--color-text-primary` ~ `--color-text-placeholder` | 1 主文本 → 4 占位符，层级递弱 |
+| 文本色 | `--color-text-disabled` / `--color-text-inverse` | 禁用 / 深底反白 |
+| 背景色 | `--color-bg-1` / `--color-bg-2` / `--color-bg-4` | 页面底 / 卡片容器 / 浮层 |
+| 背景色 | `--color-hover` / `--color-fill` | 悬停 / 填充（输入框底、禁用底） |
+| 边框色 | `--color-border-separator` / `--color-border` | 分割线 / 控件描边 |
+| 遮罩 | `--color-bg-mask` | 弹窗遮罩 |
+| 阴影 | `--g-shadow` ~ `--g-shadow` | 卡片 / 弹窗 / 最高层浮层 |
+| 圆角 | `--g-control-radius` / `-md` / `-lg` / `-full` | 控件 / 卡片 / 大容器 / 胶囊 |
 
-可选覆盖（不写则沿用 base.css 默认）：`--swt-font-family`、`--swt-mix-base`。
+可选覆盖（不写则沿用 base.css 默认）：`''HarmonyOS Sans', 'Microsoft YaHei', 'PingFang SC', Arial, sans-serif`、`#ffffff`。
 
 ## 深色皮肤注意
 
-桥接层（swt-bridge.css）用 `color-mix` 把品牌色与 `--swt-mix-base`（默认白色）混合生成 Element Plus 的 light-N 色阶。**深色皮肤必须**把 `--swt-mix-base` 覆盖为深色表面色（如 `#1d1d1d`），否则按钮 hover/浅色阶会发白。
+桥接层（swt-bridge.css）用 `color-mix` 把品牌色与 `#ffffff`（默认白色）混合生成 Element Plus 的 light-N 色阶。**深色皮肤必须**把 `#ffffff` 覆盖为深色表面色（如 `#1d1d1d`），否则按钮 hover/浅色阶会发白。
 
 ## 已有皮肤变量名不一致怎么办
 
 若自有换肤 css 已有一套变量（如 `--brand-color` 等），两种接入方式任选：
 
-- **改皮肤（推荐）**：在皮肤文件里把自有变量赋给 `--swt-*`（`--swt-color-primary: var(--brand-color);`），保持桥接层不动；
+- **改皮肤（推荐）**：在皮肤文件里把自有变量赋给 `--swt-*`（`--color-brand: var(--brand-color);`），保持桥接层不动；
 - **改桥接**：把 `swt-bridge.css` 右侧的 `var(--swt-...)` 换成自有变量名（桥接层随之脱离 FIXED 约定，需自行维护）。

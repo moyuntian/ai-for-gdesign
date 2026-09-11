@@ -3,46 +3,42 @@
 // Initializes a swt-coder page workspace: creates {slug}/ with a REAL Vue 3
 // deliverable (standard structure under src/) plus the offline preview runtime.
 //
-// init.mjs ONLY creates essential files:
-//   - mock/modules/{slug}.js     (always)
-//   - src/locales/               (always — global i18n)
-//   - src/views/{slug}/          (always — starter page)
-//   - src/router/index.js        (always — preview needs it)
-//   - src/App.vue + main.js      (always — FIXED from template)
-//
-// Other directories (api/, composables/, constants/, directives/, stores/,
-// utils/, router/guards.js, router/modules/, components/) are created
-// ON-DEMAND by the AI agent as needed.
+// Tokens, references, and components are copied from the assets package
+// (g-design-enterprise) into the workspace — swt-coder itself does NOT store
+// copies, ensuring assets upgrades require zero changes to swt-coder.
 //
 // Layout created:
 //   {slug}/
 //   ├── mock/modules/{slug}.js           # Mock 数据 + API 模拟
 //   ├── public/library/                  # 预览运行时 UMD（FIXED）
+//   ├── references/                      # ★ 从 assets 包复制（规范文件，AI 按需读取）
 //   ├── src/
 //   │   ├── main.js                      # 工程入口（FIXED）
 //   │   ├── App.vue                      # 应用壳
-//   │   ├── README.md                    # 接入说明（FIXED）
-//   │   ├── assets/                      # 主题/字体/样式（FIXED）
-//   │   ├── mock/modules/{slug}.js       # Mock 数据 + API 模拟
-//   │   ├── locales/                     # 全局 i18n
-//   │   │   ├── lang/zh-CN/common.json
-//   │   │   ├── lang/en-US/common.json
-//   │   │   └── index.js
-//   │   ├── router/index.js              # 路由（内联，无 guards/modules）
-//   │   └── views/{slug}/               # ★ 页面主目录
-//   │       ├── index.vue                # 页面主组件
-//   │       └── js/constants.js          # 页面常量
-//   ├── index.swt.html                   # 离线预览加载器（FIXED）
-//   └── preview-data.js                  # 源码映射（build 自动生成）
+//   │   ├── assets/
+//   │   │   ├── themes/                  # base.css + swt-default.css + tokens/★
+//   │   │   │   ├── base.css             # STABLE
+//   │   │   │   ├── swt-default.css       # STABLE（主题入口）
+//   │   │   │   └── tokens/              # ★ 从 assets 包复制（clean copy）
+//   │   │   ├── fonts/ style/ images/
+//   │   ├── components/                  # ★ 从 assets 包复制（组件匹配用）
+//   │   ├── locales/
+//   │   ├── router/index.js
+//   │   └── views/{slug}/
+//   ├── index.swt.html
+//   └── preview-data.js
 //
 // Usage:
-//   node init.mjs "<artifact-folder>" "<slug>"
+//   node init.mjs "<artifact-folder>" "<slug>" [--assets-root=<path>] [--ui-library=element-plus|sweetui] [--with-components|--without-components]
 //
 // Output (agent-parseable):
 //   RESULT: OK
 //   HTML_PATH: <absolute path to {slug}/index.swt.html>
 //   SRC_DIR: <absolute path to {slug}/src>
 //   PAGE: <PascalCase page name>
+//   ASSETS_ROOT: <resolved assets root or 'none'>
+//   UI_LIBRARY: <element-plus|sweetui>
+//   COMPONENTS: <enabled|disabled>
 //   RESULT: FAIL | <reason>
 
 import {
@@ -92,6 +88,22 @@ function hasFlag(name) {
 
 const uiLibrary = getFlag('ui-library') || 'element-plus';
 const withComponents = hasFlag('without-components') ? false : (hasFlag('with-components') ? true : true);
+
+// Resolve assets root: --assets-root=<path> or auto-detect relative to swt-coder location
+let assetsRoot = getFlag('assets-root');
+if (!assetsRoot) {
+  // Auto-detect: try ../../assets/g-design-enterprise-* relative to swt-coder scripts dir
+  const skillsDir = resolve(__dirname, '..'); // swt-coder/
+  const packageDir = resolve(skillsDir, '..'); // skills/
+  const parentDir = resolve(packageDir, '..'); // ai-for-gdesign-V1.2/
+  const assetsDir = join(parentDir, 'assets');
+  if (existsSync(assetsDir)) {
+    const entries = readdirSync(assetsDir).filter((n) => n.startsWith('g-design-enterprise'));
+    if (entries.length > 0) {
+      assetsRoot = join(assetsDir, entries[0]);
+    }
+  }
+}
 
 if (!['element-plus', 'sweetui'].includes(uiLibrary)) {
   fail(`Invalid --ui-library "${uiLibrary}" — must be "element-plus" or "sweetui"`);
@@ -387,7 +399,7 @@ onMounted(() => {
   .title {
     font-size: 1.6rem;
     font-weight: 700;
-    color: var(--swt-text-1);
+    color: var(--color-text-primary);
   }
 }
 </style>
@@ -440,6 +452,29 @@ import { RouterView } from 'vue-router'
 cpSync(libSrc, join(dest, 'public', 'library'), { recursive: true });
 cpSync(htmlSrc, join(dest, 'index.swt.html'));
 
+// ---------- 7a. copy tokens, references, components from assets package ----------
+if (assetsRoot && existsSync(assetsRoot)) {
+  const tokensSrc = join(assetsRoot, 'tokens');
+  const tokensDest = join(srcDir, 'assets', 'themes', 'tokens');
+  if (existsSync(tokensSrc)) {
+    cpSync(tokensSrc, tokensDest, { recursive: true });
+  }
+
+  // Copy references (design specs, component catalog, etc.)
+  const refsSrc = join(assetsRoot, 'references');
+  if (existsSync(refsSrc)) {
+    cpSync(refsSrc, join(dest, 'references'), { recursive: true });
+  }
+
+  // Copy components for component matching
+  if (withComponents) {
+    const compsSrc = join(assetsRoot, 'src', 'components');
+    if (existsSync(compsSrc)) {
+      cpSync(compsSrc, join(srcDir, 'components'), { recursive: true });
+    }
+  }
+}
+
 // ---------- 8. generate preview-data.js ----------
 const result = refresh(dest);
 if (!result.ok) fail(result.reason);
@@ -466,6 +501,7 @@ console.log('RESULT: OK');
 console.log(`HTML_PATH: ${resolve(join(dest, 'index.swt.html'))}`);
 console.log(`SRC_DIR: ${resolve(srcDir)}`);
 console.log(`PAGE: ${pageName}`);
+console.log(`ASSETS_ROOT: ${assetsRoot || 'none'}`);
 console.log(`UI_LIBRARY: ${uiLibrary}`);
 console.log(`COMPONENTS: ${withComponents ? 'enabled' : 'disabled'}`);
 process.exit(0);

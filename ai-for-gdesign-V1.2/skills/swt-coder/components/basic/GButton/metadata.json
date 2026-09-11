@@ -1,1 +1,0 @@
-{"id":"g-button","name":"GButton","level":"basic","base":"ElButton","scenarios":["通用操作"],"states":["hover","active","focus","disabled","loading"]}

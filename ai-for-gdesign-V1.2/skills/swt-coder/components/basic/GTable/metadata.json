@@ -1,1 +1,0 @@
-{"id":"g-table","name":"GTable","level":"basic","base":"ElTable","scenarios":["结构化数据展示"],"states":["loading","empty","selection"]}
