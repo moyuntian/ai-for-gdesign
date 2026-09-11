@@ -50,6 +50,4 @@ SweetUI 组件白名单（`sweetui-components.json`）目前为空数组，待 U
 - [ ] 创建 sweetui.css（token 桥接）
 - [ ] 在 preview/public/library/ 下放置 SweetUI UMD 文件
 - [ ] 在 index.swt.html 中添加 SweetUI UMD 引用分支
-
-## 完整指南参考
-详见 `references/sweetui-frontend-development.md`（完整 871 行指南）。
+- [ ] 编写完整 SweetUI 开发指南

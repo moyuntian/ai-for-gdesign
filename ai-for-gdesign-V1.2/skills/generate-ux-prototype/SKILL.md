@@ -50,41 +50,18 @@ init.mjs 按以下优先级定位 `g-design-enterprise-*` 资产库：
 
 init 时指定：`node scripts/init.mjs "<folder>" "<slug>" --ui-library=element-plus`
 
-## 组件库引入（默认开启）
+## 组件库按需加载
 
-`--with-components`（默认）：从 assets 包复制已定义组件到工作区 `src/components/`，匹配页面需求时直接 import 组件源码（CV），节省时间，不重复造轮子。未匹配的 UI 块 → AI 自由编写。
-`--without-components`：不引入组件库，纯 AI 生成。
+init.mjs **不再全量复制组件**，只创建空 `src/components/` 目录和复制 `references/`（含 component-catalog.md）。
+
+**工作流：**
+1. AI 读 `references/component-catalog.md` → 确定页面需要哪些资产库组件
+2. 运行 `node scripts/copy-components.mjs --dir "{artifact-folder}/{slug}" --components GMetricCard,GStatusTag,GSearchBar`
+3. 资产库没有但页面需要的通用组件 → AI 自己写入 `src/components/`
 
 ## Output Contract (READ FIRST)
 
-`init.mjs` 初始化出的工作区结构：
-
-```
-{slug}/
-├── mock/modules/{slug}.js          # Mock API
-├── public/library/                 # 预览运行时 UMD（FIXED）
-├── references/                     # ★ 从 assets 包复制（规范文件，AI 按需读取）
-├── src/
-│   ├── main.js                     # 工程入口（FIXED）
-│   ├── App.vue                     # 应用壳（FIXED）
-│   ├── assets/
-│   │   ├── themes/
-│   │   │   ├── base.css            # 字体/rem/骨架（FIXED）
-│   │   │   ├── swt-default.css     # 主题入口（FIXED）
-│   │   │   └── tokens/             # ★ 从 assets 包复制（g-design-enterprise clean copy）
-│   │   ├── fonts/ style/ images/
-│   ├── components/                 # ★ 从 assets 包复制（组件匹配用）
-│   ├── locales/                    # i18n
-│   ├── router/index.js
-│   ├── views/{slug}/
-│   │   ├── index.vue               # 页面主组件
-│   │   └── js/constants.js         # 页面常量
-│   ├── api/ composables/ constants/ directives/ stores/ utils/
-├── index.swt.html                  # 离线预览加载器（FIXED）
-└── preview-data.js                 # 源码映射（build 自动生成）
-```
-
-**Editable vs FIXED:**
+init.mjs 创建工作区，**Editable vs FIXED:**
 - **You edit ONLY:** `views/**`、`components/**`、`api/**`、`composables/**`、`constants/**`、`directives/**`、`locales/**`、`router/**`、`stores/**`、`utils/**`、`mock/**`、`assets/uploads/`、`assets/images/`。
 - **FIXED:** `main.js`、`App.vue`、`assets/themes/base.css`、`assets/themes/swt-default.css`、`assets/themes/tokens/`、`public/`、`index.swt.html`、`preview-data.js`、`references/`。
 
@@ -129,7 +106,15 @@ NEVER sparse：用尽全部数据、mock 真实文本、CTA、搜索/筛选/分�
 ```
 node scripts/init.mjs "{artifact-folder}" "{slug}" --ui-library=element-plus
 ```
-成功输出 `RESULT: OK` + `HTML_PATH` + `SRC_DIR` + `PAGE` + `ASSETS_ROOT` + `UI_LIBRARY` + `COMPONENTS`。
+成功输出 `RESULT: OK` + `HTML_PATH` + `SRC_DIR` + `PAGE` + `ASSETS_ROOT` + `UI_LIBRARY`。
+
+### Step 2.5 — 按需加载组件（MANDATORY）
+1. 读 `references/component-catalog.md`，确定页面需要的资产库组件列表。
+2. 运行：
+```
+node scripts/copy-components.mjs --dir "{artifact-folder}/{slug}" --components GMetricCard,GStatusTag
+```
+3. 资产库没有但页面需要的通用组件 → AI 自己写入 `src/components/`。
 
 ### Step 3 — Author .vue Files
 1. **并行写文件（性能硬规则）**：先把全部文件构思完，再在**同一条消息里并行发出所有 Write 调用**；严禁写一个文件、等一次结果、再写下一个 —— 每多一轮串行往返，用户就多等一次完整模型生成。
@@ -169,7 +154,7 @@ node scripts/build.mjs --dir "{artifact-folder}/{slug}"
 5. **图标:** `import { Search } from '@element-plus/icons-vue'`；`<el-icon :size="20"><Search /></el-icon>`。
 6. **反馈:** `ElMessage` 轻提示；`ElMessageBox.confirm` 危险操作；`v-loading`；`el-empty` 空态。
 7. **样式:** `<style lang="less" scoped>`，类名简短功能命名，颜色用 `var(--color-*)`。Less 嵌套 ≤ 3 层。
-8. **表格:** `el-table` + `el-table-column`；`<template #default="{ row }">`；操作列 `fixed="right"` ≤3 按钮。
+8. **表格:** `el-table` + `el-table-column`；`<template #default="{ row }">`；操作列 `fixed="right"` ≤3 按钮。`el-table-column` 的 `width`/`min-width` prop 用数字（像素），不用 rem。
 9. **相对路径:** 从 `views/{slug}/index.vue` 引用：
    - 子组件: `import X from './components/X.vue'`
    - 常量: `import { Y } from './js/constants.js'`
@@ -205,6 +190,8 @@ el-row el-col el-card el-tabs el-tab-pane el-tooltip el-dropdown
 
 ### rem 换算（根字体 10px）
 `px / 10 = rem`（16px → 1.6rem、24px → 2.4rem、8px → 0.8rem）
+
+> **例外:** Vue 组件 props（如 `el-table-column` 的 `width`/`min-width`、`el-icon` 的 `:size`）使用数字像素值，不做 rem 换算。
 
 ### 高频错误预防
 | # | 错误 | 正确 |

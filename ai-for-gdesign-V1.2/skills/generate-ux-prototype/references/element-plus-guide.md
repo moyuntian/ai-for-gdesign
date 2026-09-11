@@ -65,4 +65,4 @@ const t = { title: '页面标题', refresh: '刷新' }
 - 图片路径写死相对字符串 — 应 `import img from '...'`
 - 组件注册到全局 — 一律显式 import
 - 静态内联 `style="..."` — 禁止
-- px 单位 — 改用 rem
+- px 单位 — 改用 rem（**例外:** 组件 prop 如 `el-table-column` 的 `width`/`min-width`、`el-icon` 的 `:size` 保持数字像素值）

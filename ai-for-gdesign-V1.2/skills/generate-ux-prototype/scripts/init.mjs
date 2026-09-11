@@ -88,7 +88,6 @@ function hasFlag(name) {
 }
 
 const uiLibrary = getFlag('ui-library') || 'element-plus';
-const withComponents = hasFlag('without-components') ? false : (hasFlag('with-components') ? true : true);
 
 // Resolve assets root: --assets-root=<path> > $ASSETS_ROOT > walk up from skill dir
 function findLibraryUnder(assetsDir) {
@@ -516,13 +515,10 @@ if (assetsRoot && existsSync(assetsRoot)) {
     }
   }
 
-  // Copy components for component matching
-  if (withComponents) {
-    const compsSrc = join(assetsRoot, 'src', 'components');
-    if (existsSync(compsSrc)) {
-      cpSync(compsSrc, join(srcDir, 'components'), { recursive: true });
-    }
-  }
+  // Components are NOT copied here — use copy-components.mjs after deciding
+  // which components the page needs (see references/component-catalog.md).
+  // Create empty components/ dir so import paths resolve during development.
+  mkdirSync(join(srcDir, 'components'), { recursive: true });
 }
 
 // ---------- 8. generate preview-data.js ----------
@@ -554,5 +550,4 @@ console.log(`PAGE: ${pageName}`);
 console.log(`ASSETS_ROOT: ${assetsRoot || 'none'}`);
 console.log(`ASSETS_ROOT_SOURCE: ${assetsRootSource}`);
 console.log(`UI_LIBRARY: ${uiLibrary}`);
-console.log(`COMPONENTS: ${withComponents ? 'enabled' : 'disabled'}`);
 process.exit(0);
