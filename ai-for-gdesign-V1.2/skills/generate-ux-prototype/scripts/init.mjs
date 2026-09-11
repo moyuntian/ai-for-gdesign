@@ -1,11 +1,11 @@
 ﻿#!/usr/bin/env node
 // init.mjs
-// Initializes a swt-coder page workspace: creates {slug}/ with a REAL Vue 3
+// Initializes a generate-ux-prototype page workspace: creates {slug}/ with a REAL Vue 3
 // deliverable (standard structure under src/) plus the offline preview runtime.
 //
 // Tokens, references, and components are copied from the assets package
-// (g-design-enterprise) into the workspace — swt-coder itself does NOT store
-// copies, ensuring assets upgrades require zero changes to swt-coder.
+// (g-design-enterprise) into the workspace — the skill itself does NOT store
+// copies, ensuring assets upgrades require zero changes to this skill.
 //
 // Layout created:
 //   {slug}/
@@ -37,6 +37,7 @@
 //   SRC_DIR: <absolute path to {slug}/src>
 //   PAGE: <PascalCase page name>
 //   ASSETS_ROOT: <resolved assets root or 'none'>
+//   ASSETS_ROOT_SOURCE: <flag|env:ASSETS_ROOT|auto-detect (N levels)|none>
 //   UI_LIBRARY: <element-plus|sweetui>
 //   COMPONENTS: <enabled|disabled>
 //   RESULT: FAIL | <reason>
@@ -89,20 +90,59 @@ function hasFlag(name) {
 const uiLibrary = getFlag('ui-library') || 'element-plus';
 const withComponents = hasFlag('without-components') ? false : (hasFlag('with-components') ? true : true);
 
-// Resolve assets root: --assets-root=<path> or auto-detect relative to swt-coder location
+// Resolve assets root: --assets-root=<path> > $ASSETS_ROOT > walk up from skill dir
+function findLibraryUnder(assetsDir) {
+  if (!existsSync(assetsDir)) return undefined;
+  const entries = readdirSync(assetsDir)
+    .filter((n) => n.startsWith('g-design-enterprise'))
+    .sort()
+    .reverse(); // prefer highest version when several are present
+  return entries.length > 0 ? join(assetsDir, entries[0]) : undefined;
+}
+
 let assetsRoot = getFlag('assets-root');
-if (!assetsRoot) {
-  // Auto-detect: try ../../assets/g-design-enterprise-* relative to swt-coder scripts dir
-  const skillsDir = resolve(__dirname, '..'); // swt-coder/
-  const packageDir = resolve(skillsDir, '..'); // skills/
-  const parentDir = resolve(packageDir, '..'); // ai-for-gdesign-V1.2/
-  const assetsDir = join(parentDir, 'assets');
-  if (existsSync(assetsDir)) {
-    const entries = readdirSync(assetsDir).filter((n) => n.startsWith('g-design-enterprise'));
-    if (entries.length > 0) {
-      assetsRoot = join(assetsDir, entries[0]);
-    }
+let assetsRootSource = 'flag';
+if (!assetsRoot && process.env.ASSETS_ROOT) {
+  const envVal = resolve(process.env.ASSETS_ROOT);
+  if (existsSync(join(envVal, 'asset-manifest.json'))) {
+    assetsRoot = envVal; // points at the library itself
+    assetsRootSource = 'env:ASSETS_ROOT';
+  } else {
+    assetsRoot = findLibraryUnder(envVal); // points at an assets/ parent
+    if (assetsRoot) assetsRootSource = 'env:ASSETS_ROOT';
   }
+}
+if (!assetsRoot) {
+  // Auto-detect: walk up from the skill dir (≤6 levels) looking for assets/g-design-enterprise-*.
+  // At each level probe <level>/assets and <level>/*/assets (package folders like
+  // ai-for-gdesign-V1.2/ may nest the assets dir one level below the repo root).
+  let cursor = resolve(__dirname, '..'); // skill root
+  for (let i = 0; i < 6 && !assetsRoot; i++) {
+    assetsRoot = findLibraryUnder(join(cursor, 'assets'));
+    if (assetsRoot) {
+      assetsRootSource = `auto-detect (walked up ${i} level${i === 1 ? '' : 's'})`;
+      break;
+    }
+    for (const entry of readdirSync(cursor, { withFileTypes: true })) {
+      if (!entry.isDirectory() || entry.name.startsWith('.')) continue;
+      assetsRoot = findLibraryUnder(join(cursor, entry.name, 'assets'));
+      if (assetsRoot) {
+        assetsRootSource = `auto-detect (walked up ${i} level${i === 1 ? '' : 's'}, via ${entry.name}/assets)`;
+        break;
+      }
+    }
+    if (assetsRoot) break;
+    const next = resolve(cursor, '..');
+    if (next === cursor) break;
+    cursor = next;
+  }
+}
+if (assetsRoot && !existsSync(join(assetsRoot, 'asset-manifest.json'))) {
+  console.log(`WARN: ASSETS_ROOT "${assetsRoot}" (from ${assetsRootSource}) has no asset-manifest.json — tokens/references/components may be missing`);
+}
+if (!assetsRoot) {
+  console.log('WARN: assets library not found — workspace will be created WITHOUT tokens/references/components.');
+  console.log('WARN: fix by re-running with --assets-root=<path to g-design-enterprise-v1.3.0> or setting env ASSETS_ROOT.');
 }
 
 if (!['element-plus', 'sweetui'].includes(uiLibrary)) {
@@ -502,6 +542,7 @@ console.log(`HTML_PATH: ${resolve(join(dest, 'index.swt.html'))}`);
 console.log(`SRC_DIR: ${resolve(srcDir)}`);
 console.log(`PAGE: ${pageName}`);
 console.log(`ASSETS_ROOT: ${assetsRoot || 'none'}`);
+console.log(`ASSETS_ROOT_SOURCE: ${assetsRootSource}`);
 console.log(`UI_LIBRARY: ${uiLibrary}`);
 console.log(`COMPONENTS: ${withComponents ? 'enabled' : 'disabled'}`);
 process.exit(0);

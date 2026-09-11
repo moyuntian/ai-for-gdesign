@@ -1,6 +1,6 @@
 ﻿#!/usr/bin/env node
 // build.mjs
-// Build & verify a swt-coder page workspace ({slug}/ with src/ + index.swt.html).
+// Build & verify a generate-ux-prototype page workspace ({slug}/ with src/ + index.swt.html).
 // AUTO-REFRESHES preview-data.js first (embedding src/ sources for the offline
 // preview), then machine-checks everything:
 //

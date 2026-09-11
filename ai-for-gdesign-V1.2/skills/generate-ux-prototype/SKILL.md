@@ -1,9 +1,9 @@
 ---
-name: swt-coder
-description: Generate Vue 3 + Element Plus / SweetUI pages from text, screenshots, or HTML. Uses Less + rem + Vue Router + g-design-enterprise token system (--color-*). Delivers .vue SFC source + zero-build offline preview (index.swt.html). Triggers on "页面生成", "Vue 页面", "Element Plus", "SweetUI", "看板", "列表", "截图转码", "dashboard".
+name: generate-ux-prototype
+description: Generate Vue 3 + Element Plus / SweetUI pages from text, screenshots, or HTML. Uses Less + rem + Vue Router + g-design-enterprise token system (--color-*). Delivers .vue SFC source + zero-build offline preview (index.swt.html). Triggers on "页面生成", "Vue 页面", "Element Plus", "SweetUI", "看板", "列表", "截图转码", "dashboard", "原型", "prototype".
 ---
 
-# SWT Coder — Vue 3 + Element Plus / SweetUI 页面生成（.vue 源码交付）
+# Generate UX Prototype — Vue 3 + Element Plus / SweetUI 页面生成（.vue 源码交付）
 
 You are an expert UI/UX Designer and Frontend Engineer specializing in Generative UI (Vue 3 + Element Plus / SweetUI).
 Your product is **真实 Vue 源码**：一组 `.vue` SFC 文件（`<script setup>` + Less + rem + 标准ESM import），写在 `{slug}/src/` 工作区内 —— **代码本身就是交付件**，可直接拷入任何 Vue 3 + Element Plus + Vite 工程；同时附带零构建离线预览 `index.swt.html`（浏览器直接打开）。
@@ -21,12 +21,23 @@ Your product is **真实 Vue 源码**：一组 `.vue` SFC 文件（`<script setu
 
 Token 来自 `assets/g-design-enterprise-v1.3.0/tokens/`，init.mjs 自动复制到工作区 `src/assets/themes/tokens/`。AI 生成代码直接用 `var(--color-*)` 前缀，不使用其他前缀。
 
+## 资产根（ASSETS_ROOT）解析
+
+init.mjs 按以下优先级定位 `g-design-enterprise-*` 资产库：
+
+1. `--assets-root=<path>` 显式指定（推荐，跨工具安装时必用）；
+2. 环境变量 `ASSETS_ROOT`；
+3. 自动探测：从 skill 目录逐级向上查找（最多 6 级）`assets/g-design-enterprise-*`；
+4. 都未命中 → 工作区仍会创建，但无 tokens/references/components，并在输出中给出 `ASSETS_ROOT: none` 与修复提示 —— 此时把资产包路径通过 `--assets-root` 传入后重新 init。
+
 ## Session Context Caching
 
 1. **NEVER re-read** a file you have already read this session.
 2. **Design system:** `references/design_system.md` — 仅在换肤/深色模式/token场景咨询时读取（日常生成不需要，SKILL.md 已内嵌速查）。
 3. **EP API:** 信任你的知识，标准 EP 2.13.5 API。
 4. **SweetUI:** API 兼容 Element Plus（`sweet-config-provider namespace="el|sweet"`），差异见 `references/sweetui-guide.md`。
+
+> 完整能力链路：本 skill 名为 `generate-ux-prototype`（工程实现代号 SWT），是 `extract-structured-requirements → derive-experience-insights → generate-ux-prototype → manage-design-assets` 链路的原型生成阶段。
 
 ## UI 库选择
 

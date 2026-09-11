@@ -1,4 +1,4 @@
-﻿# SWT Coder 页面交付件（src/）
+﻿# Generate UX Prototype 页面交付件（src/）
 
 本目录即生成产物，可直接拷入任何 Vue 3 + Element Plus 工程。
 

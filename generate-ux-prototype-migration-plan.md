@@ -1,5 +1,7 @@
 # SWT-Coder Migration Plan
 
+> **NOTE (2026-09-11):** The skill was later renamed `swt-coder` → `generate-ux-prototype` to match the package workflow naming (`extract-structured-requirements → derive-experience-insights → generate-ux-prototype → manage-design-assets`). Technical identifiers inside deliverables (`--swt-*` tokens, `index.swt.html`, `data-swt-theme`) are kept unchanged.
+
 ## Overview
 Replace generate-ux-prototype with swt-coder, merging gts-autin-coder capabilities + g-design-enterprise tokens + gts-ux-spec naming + ICT best practices.
 
