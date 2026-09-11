@@ -159,6 +159,49 @@
     "--color-corporate-blue": "#2070F3",
     "--color-corporate-mint": "#00A874"
   },
+  "visualPalette": {
+    "--visual-blue-1": "#B9CEFF",
+    "--visual-lavender-1": "#C9C1F4",
+    "--visual-pink-1": "#E8CBE5",
+    "--visual-gradient-hero": "linear-gradient(120deg, #B9CEFF 0%, #C9C1F4 52%, #E8CBE5 100%)",
+    "--visual-gradient-soft": "linear-gradient(135deg, rgba(185, 206, 255, .72) 0%, rgba(232, 203, 229, .62) 100%)",
+    "usage": "参考图驱动的展示型背景与视觉氛围，不替代业务语义色"
+  },
+  "glassTokens": {
+    "--glass-surface": {
+      "light": "rgba(255, 255, 255, .56)",
+      "dark": "rgba(25, 25, 25, .58)",
+      "usage": "标准玻璃表面"
+    },
+    "--glass-surface-soft": {
+      "light": "rgba(255, 255, 255, .38)",
+      "dark": "rgba(25, 25, 25, .42)",
+      "usage": "轻量玻璃表面"
+    },
+    "--glass-surface-strong": {
+      "light": "rgba(255, 255, 255, .72)",
+      "dark": "rgba(25, 25, 25, .76)",
+      "usage": "导航和高层级玻璃表面"
+    },
+    "--glass-border": {
+      "light": "rgba(255, 255, 255, .72)",
+      "dark": "rgba(255, 255, 255, .22)",
+      "usage": "玻璃高光边框"
+    },
+    "--glass-border-subtle": {
+      "light": "rgba(255, 255, 255, .44)",
+      "dark": "rgba(255, 255, 255, .12)",
+      "usage": "轻量玻璃边框"
+    },
+    "--glass-blur": "20px",
+    "--glass-saturate": "120%",
+    "--glass-border-width": "1px",
+    "--glass-radius": "16px",
+    "--glass-radius-lg": "20px",
+    "--glass-shadow": "0 8px 24px rgba(54, 76, 130, .12)",
+    "--glass-shadow-strong": "0 12px 32px rgba(54, 76, 130, .16)",
+    "fallback": "backdrop-filter 不可用时使用高不透明度实色背景"
+  },
   "uiTokens": [
     {
       "token": "--color-brand",

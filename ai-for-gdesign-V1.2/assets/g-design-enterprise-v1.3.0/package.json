@@ -13,6 +13,7 @@
       "require": "./dist/g-design-enterprise.umd.cjs"
     },
     "./style.css": "./dist/g-design-enterprise.css",
+    "./glass.css": "./dist/glass.css",
     "./tokens": "./tokens/index.scss",
     "./manifest": "./asset-manifest.json"
     ,"./icons/*": "./assets/icons/lucide/icons/*"

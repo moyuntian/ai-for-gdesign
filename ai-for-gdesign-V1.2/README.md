@@ -1,6 +1,6 @@
-# AI for G Design V1
+# AI for G Design V1.3
 
-一个可跨大模型工具复用的 AI For Design 安装包，内含四个独立 Skill 与 `g-design-enterprise-v1.3.0` 企业设计资产库。
+一个可跨大模型工具复用的 AI For Design 安装包，内含四个独立 Skill 与 `g-design-enterprise-v1.3.0` 企业设计资产库。本版本在 H Design 色彩 Token 基础上增加参考图驱动的 Aurora Glass 视觉扩展。
 
 ## 能力链路
 
@@ -38,10 +38,18 @@ Windows PowerShell：
 
 原型生成必须遵守：一个原型只使用一个已登记资产库和一个精确版本；多个设计方向只有被设计师标记为 `approved` 的方向才生成原型。
 
+### V1.3 Aurora Glass 视觉扩展
+
+- 保留 `#0067D1` 为软件产品主强调色，业务交互状态仍由原有语义 Token 控制。
+- 新增蓝—淡紫—浅粉展示型渐变色，以及 Light / Dark 双主题的磨砂玻璃 Token。
+- 玻璃效果通过 `tokens/glass.css` 统一提供，包含半透明表面、白色高光边框、背景模糊、饱和度和玻璃阴影。
+- 推荐用于仪表盘头图、指标卡、顶部导航和概览面板；表格、复杂表单和告警密集区默认保持高对比实色表面。
+- `backdrop-filter` 不可用时回退到更高不透明度的背景，保证离线和兼容环境下仍可用。
+
 ## 目录
 
 ```text
-ai-for-gdesign-V1/
+ai-for-gdesign-V1.3/
 ├── skills/                       # 四个独立 Skill
 ├── assets/g-design-enterprise-v1.3.0/
 ├── workflow-contracts/            # 阶段间输入输出约定

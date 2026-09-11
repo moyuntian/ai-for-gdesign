@@ -11,7 +11,7 @@ PACKAGE_ROOT="$(CDPATH= cd -- "$SCRIPT_DIR/.." && pwd)"
 DESTINATION="$1"
 mkdir -p "$DESTINATION"
 
-for skill in derive-experience-insights extract-structured-requirements swt-coder manage-design-assets; do
+for skill in derive-experience-insights extract-structured-requirements generate-ux-prototype manage-design-assets; do
   rm -rf "$DESTINATION/$skill"
   cp -R "$PACKAGE_ROOT/skills/$skill" "$DESTINATION/$skill"
 done

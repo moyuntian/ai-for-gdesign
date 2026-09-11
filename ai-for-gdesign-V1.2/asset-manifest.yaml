@@ -1,6 +1,6 @@
 schemaVersion: "1.0"
 packageId: ai-for-gdesign
-packageVersion: "1.0.0"
+packageVersion: "1.3.0"
 assetsRoot: assets
 libraries:
   - id: g-design-enterprise
@@ -11,10 +11,15 @@ libraries:
     componentBase: element-plus@2.13.5
     themes: [light, dark]
     status: active
-    capabilities: [form, table, dashboard, topology, monitoring, alarm-management]
+    capabilities: [form, table, dashboard, topology, monitoring, alarm-management, glass-surface]
+    visualStyles: [enterprise-light-dark, aurora-glass]
     offlineIcons: lucide@1.43.0
 selectionRules:
   onlyActiveLibraries: true
   oneLibraryPerPrototype: true
   approvedDirectionsEqualPrototypeCount: true
   neverModifyMountedLibraryDuringGeneration: true
+  visualStyleMustBeExplicit: true
+  glassSurfaceRules:
+    preserveBusinessContrast: true
+    fallbackWhenBackdropFilterUnavailable: true

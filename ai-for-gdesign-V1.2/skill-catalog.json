@@ -1,12 +1,12 @@
 {
   "schemaVersion": "1.0",
   "packageId": "ai-for-gdesign",
-  "packageVersion": "1.2.0",
+  "packageVersion": "1.3.0",
   "skills": {
     "extract-structured-requirements": {"stage":"requirements","entry":"skills/extract-structured-requirements/SKILL.md"},
     "derive-experience-insights": {"stage":"insight","entry":"skills/derive-experience-insights/SKILL.md"},
-    "swt-coder": {"stage":"prototype","entry":"skills/swt-coder/SKILL.md","assetsRoot":"assets"},
+    "generate-ux-prototype": {"stage":"prototype","entry":"skills/generate-ux-prototype/SKILL.md","assetsRoot":"assets"},
     "manage-design-assets": {"stage":"governance","entry":"skills/manage-design-assets/SKILL.md","assetsRoot":"assets"}
   },
-  "workflow": ["extract-structured-requirements","derive-experience-insights","swt-coder","manage-design-assets"]
+  "workflow": ["extract-structured-requirements","derive-experience-insights","generate-ux-prototype","manage-design-assets"]
 }

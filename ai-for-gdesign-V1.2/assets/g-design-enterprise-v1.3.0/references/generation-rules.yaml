@@ -1,5 +1,5 @@
 asset_library: g-design-enterprise
-version: 1.2.0
+version: 1.3.0
 framework: vue3
 base_library: element-plus@2.13.5
 selection:
@@ -11,7 +11,11 @@ selection:
   alarm_impact: AlarmImpactPage
 rules:
   - use semantic tokens instead of literal colors
+  - keep #0067D1 as the software product primary accent color
   - support light and dark themes
+  - visual style must be explicit: enterprise-light-dark or aurora-glass
+  - use glass tokens only for approved surfaces and preserve business contrast
+  - provide solid-color fallback when backdrop-filter is unavailable
   - cover loading empty error disabled and permission states
   - prefer business components over repeated basic-component composition
   - use topology only when relationships or propagation paths matter
@@ -26,3 +30,9 @@ icons:
   offline: true
   prefer_semantic_aliases: true
   forbid_runtime_cdn: true
+visual_styles:
+  aurora-glass:
+    token_file: tokens/glass.css
+    recommended_surfaces: [dashboard-hero, metric-card, top-navigation, overview-panel]
+    excluded_surfaces: [dense-table, complex-form, alarm-list]
+    fallback: solid-surface

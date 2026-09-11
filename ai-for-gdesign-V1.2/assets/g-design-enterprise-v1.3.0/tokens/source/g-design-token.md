@@ -19,6 +19,18 @@
 
 颜色以 Word 为准，替换旧版颜色章节；原有字体、间距、圆角、边框尺寸和投影规范如下。
 
+### 3.1 Aurora Glass 视觉扩展
+
+参考图呈现的是蓝—淡紫—浅粉的柔和渐变背景，以及白色半透明卡片、边框高光和背景模糊。V1.3 将其作为独立的展示型视觉层加入，不改变 H Design 业务语义色。
+
+- 主强调色继续使用 `--color-brand: var(--brand-50)`，实际值为 `#0067D1`。
+- 展示型背景使用 `--visual-gradient-hero` 或 `--visual-gradient-soft`。
+- 玻璃表面使用 `--glass-surface`、`--glass-surface-soft` 或 `--glass-surface-strong`。
+- 玻璃材质统一使用 `--glass-border`、`--glass-blur`、`--glass-saturate` 和 `--glass-shadow`。
+- 推荐场景：仪表盘头图、指标卡、顶部导航、概览面板和轻量信息卡。
+- 排除场景：高密度表格、复杂表单、告警列表和需要强对比的状态区域。
+- 完整 CSS 实现见 [glass.css](../glass.css)，机器可读定义见 [color-tokens.json](../color-tokens.json)。
+
 ## 4. 圆角
 
 | Token | 值 | 典型用途 |

@@ -5,7 +5,7 @@ param(
 
 $PackageRoot = Split-Path -Parent $PSScriptRoot
 New-Item -ItemType Directory -Force -Path $Destination | Out-Null
-$Skills = @('derive-experience-insights','extract-structured-requirements','swt-coder','manage-design-assets')
+$Skills = @('derive-experience-insights','extract-structured-requirements','generate-ux-prototype','manage-design-assets')
 foreach ($Skill in $Skills) {
   $Target = Join-Path $Destination $Skill
   if (Test-Path $Target) { Remove-Item -Recurse -Force $Target }

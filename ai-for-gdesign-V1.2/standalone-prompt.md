@@ -1,4 +1,4 @@
-# AI for G Design V1 · 通用调用提示
+# AI for G Design V1.3 · 通用调用提示
 
 你正在使用 AI For Design 工作流。请先读取与当前任务对应的 `skills/<skill-name>/SKILL.md`，严格遵循其中的输入确认、证据边界、人工确认、输出契约和停止条件。
 
@@ -10,5 +10,7 @@
 4. `manage-design-assets`：在原型验证后，比较并提出企业资产库同步建议；未经明确批准不得写入资产库。
 
 当前资产根路径：`assets/g-design-enterprise-v1.3.0/`
+
+视觉风格调用：生成原型前必须明确选择 `enterprise-light-dark` 或 `aurora-glass`；选择 `aurora-glass` 时读取 `assets/g-design-enterprise-v1.3.0/tokens/glass.css`，仅在仪表盘头图、指标卡、顶部导航和概览面板等适合的表面使用磨砂玻璃，表格、复杂表单和告警列表保持高对比实色表面。软件产品主强调色固定为 `#0067D1`。
 
 标准顺序：结构化需求 → 体验洞察 → 设计原型 → 资产治理。遇到事实缺口、权限缺口、资产缺口或未确认规则时，明确标记并暂停，不要猜测。

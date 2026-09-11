@@ -1,0 +1,87 @@
+/*
+ * Aurora Glass visual extension.
+ * The business semantic palette remains H Design based; these tokens are for
+ * approved display surfaces such as dashboard heroes and overview cards.
+ */
+:root,
+[data-theme="light"] {
+  --visual-blue-1: #B9CEFF;
+  --visual-lavender-1: #C9C1F4;
+  --visual-pink-1: #E8CBE5;
+  --visual-gradient-hero: linear-gradient(120deg, #B9CEFF 0%, #C9C1F4 52%, #E8CBE5 100%);
+  --visual-gradient-soft: linear-gradient(135deg, rgba(185, 206, 255, .72) 0%, rgba(232, 203, 229, .62) 100%);
+  --glass-surface: rgba(255, 255, 255, .56);
+  --glass-surface-soft: rgba(255, 255, 255, .38);
+  --glass-surface-strong: rgba(255, 255, 255, .72);
+  --glass-border: rgba(255, 255, 255, .72);
+  --glass-border-subtle: rgba(255, 255, 255, .44);
+  --glass-border-width: 1px;
+  --glass-blur: 20px;
+  --glass-saturate: 120%;
+  --glass-radius: 16px;
+  --glass-radius-lg: 20px;
+  --glass-shadow: 0 8px 24px rgba(54, 76, 130, .12);
+  --glass-shadow-strong: 0 12px 32px rgba(54, 76, 130, .16);
+}
+
+[data-theme="dark"] {
+  --visual-blue-1: #243A67;
+  --visual-lavender-1: #493F73;
+  --visual-pink-1: #6A4267;
+  --visual-gradient-hero: linear-gradient(120deg, #243A67 0%, #493F73 52%, #6A4267 100%);
+  --visual-gradient-soft: linear-gradient(135deg, rgba(36, 58, 103, .86) 0%, rgba(106, 66, 103, .82) 100%);
+  --glass-surface: rgba(25, 25, 25, .58);
+  --glass-surface-soft: rgba(25, 25, 25, .42);
+  --glass-surface-strong: rgba(25, 25, 25, .76);
+  --glass-border: rgba(255, 255, 255, .22);
+  --glass-border-subtle: rgba(255, 255, 255, .12);
+  --glass-shadow: 0 8px 24px rgba(0, 0, 0, .24);
+  --glass-shadow-strong: 0 12px 32px rgba(0, 0, 0, .34);
+}
+
+.g-glass-surface,
+.g-glass-surface-soft,
+.g-glass-header {
+  border: var(--glass-border-width) solid var(--glass-border);
+  border-radius: var(--glass-radius);
+  box-shadow: var(--glass-shadow);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+}
+
+.g-glass-surface {
+  background: var(--glass-surface);
+}
+
+.g-glass-surface-soft {
+  background: var(--glass-surface-soft);
+  border-color: var(--glass-border-subtle);
+}
+
+.g-glass-header {
+  background: var(--glass-surface-strong);
+  border-radius: var(--glass-radius-lg);
+  box-shadow: var(--glass-shadow-strong);
+}
+
+@supports not ((backdrop-filter: blur(1px))) {
+  .g-glass-surface,
+  .g-glass-surface-soft,
+  .g-glass-header {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  :root,
+  [data-theme="light"] {
+    --glass-surface: rgba(255, 255, 255, .92);
+    --glass-surface-soft: rgba(255, 255, 255, .86);
+    --glass-surface-strong: rgba(255, 255, 255, .96);
+  }
+
+  [data-theme="dark"] {
+    --glass-surface: rgba(25, 25, 25, .92);
+    --glass-surface-soft: rgba(25, 25, 25, .86);
+    --glass-surface-strong: rgba(25, 25, 25, .96);
+  }
+}

@@ -1,6 +1,6 @@
 # G Design Enterprise 1.3.0
 
-基于 `g-design-token.md` 与 `Element Plus 2.13.5` 的 Vue 3 企业级组件和页面模板资产库。
+基于 `g-design-token.md`、Aurora Glass 视觉扩展与 `Element Plus 2.13.5` 的 Vue 3 企业级组件和页面模板资产库。
 
 ## 使用
 
@@ -21,7 +21,17 @@ createApp(App).use(ElementPlus).use(GDesignEnterprise).mount('#app')
 
 在根节点设置 `data-theme="dark"` 启用深色主题。每个组件和页面模板均独立成目录，并附机器可读 `metadata.json`。
 
-## V1.2资产规模
+## Aurora Glass 视觉扩展
+
+- 统一入口：`tokens/glass.css`。
+- 已提供 `@g-design/enterprise/glass.css` 分发入口，适合不直接导入 Token 源文件的项目。
+- 视觉色板：`--visual-blue-1`、`--visual-lavender-1`、`--visual-pink-1`，用于概览背景和展示型渐变。
+- 玻璃 Token：`--glass-surface`、`--glass-surface-soft`、`--glass-border`、`--glass-blur`、`--glass-saturate`、`--glass-shadow`。
+- 玻璃组件类：`.g-glass-surface`、`.g-glass-surface-soft`、`.g-glass-header`。
+- 仅建议用于仪表盘概览、头图、指标卡、导航和轻量面板；表格、表单、告警列表默认使用实色高对比表面。
+- 玻璃效果不可用时自动回退为不透明度更高的浅色或深色背景。
+
+## V1.3资产规模
 
 - 43个基础组件：新增上传、穿梭框、树、虚拟树、自动补全、下拉、气泡确认、进度和折叠面板。
 - 13个业务组件、5个复杂组件、6个页面模板。
