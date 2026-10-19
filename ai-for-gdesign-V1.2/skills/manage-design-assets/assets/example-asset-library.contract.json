@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "1.1",
+  "assetId": "example-enterprise-style",
+  "framework": "vue",
+  "discovery": {
+    "components": "src/components/*.vue",
+    "templates": "src/templates/*.vue",
+    "indexes": "indexes",
+    "manifest": "asset-manifest.json"
+  },
+  "indexMapping": {
+    "components": "component-index.json",
+    "templates": "template-index.json",
+    "interactions": "interaction-index.json",
+    "rootKey": "components",
+    "templateRootKey": "templates",
+    "interactionRootKey": "interactions"
+  },
+  "assetNaming": {
+    "componentIdTransform": "kebab-case",
+    "templateIdTransform": "kebab-case"
+  },
+  "manifestMapping": {
+    "assetVersionField": "assetVersion",
+    "protectedFilesField": "protectedFiles",
+    "sourceReleaseSha256Field": "sourceReleaseSha256",
+    "prototypeBaseFilesField": "prototypeBaseFiles"
+  },
+  "validation": {
+    "configValidator": "scripts/validate_config.py"
+  },
+  "versioning": {
+    "jsonFiles": ["indexes/*.json", "configs/*.json", "schemas/*.json"]
+  },
+  "syncStrategy": {
+    "hashAlgorithm": "sha256",
+    "registerNewAssets": true,
+    "updateManifest": true,
+    "bumpVersionOnSync": true,
+    "autoDetectDependencies": false
+  },
+  "ignorePatterns": ["node_modules", "dist", ".DS_Store", "._*", "*.test.*"]
+}

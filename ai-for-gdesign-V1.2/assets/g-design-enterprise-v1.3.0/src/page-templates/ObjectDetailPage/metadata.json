@@ -1,0 +1,28 @@
+{
+  "id": "object-detail-page",
+  "name": "ObjectDetailPage",
+  "complexity": "medium",
+  "scenarios": [
+    "设备详情",
+    "服务详情"
+  ],
+  "components": [
+    "GStatusTag",
+    "GMonitorPanel",
+    "GTimelinePro"
+  ],
+  "pageStates": [
+    "loading",
+    "empty",
+    "error",
+    "forbidden",
+    "partial",
+    "ready"
+  ],
+  "feedback": [
+    "save-success",
+    "save-failure",
+    "delete-confirm",
+    "batch-result"
+  ]
+}

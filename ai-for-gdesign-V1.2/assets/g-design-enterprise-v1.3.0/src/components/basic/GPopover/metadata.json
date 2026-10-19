@@ -1,0 +1,19 @@
+{
+  "id": "g-popover",
+  "name": "GPopover",
+  "level": "basic",
+  "category": "overlay",
+  "base": "ElPopover",
+  "description": "轻量浮层",
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "states": [
+    "default",
+    "hover",
+    "active",
+    "focus",
+    "disabled"
+  ]
+}

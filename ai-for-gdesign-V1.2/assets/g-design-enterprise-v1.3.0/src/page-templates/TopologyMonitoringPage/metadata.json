@@ -1,0 +1,26 @@
+{
+  "id": "topology-monitoring-page",
+  "name": "TopologyMonitoringPage",
+  "complexity": "complex",
+  "scenarios": [
+    "网络监控",
+    "服务依赖"
+  ],
+  "components": [
+    "GTopology"
+  ],
+  "pageStates": [
+    "loading",
+    "empty",
+    "error",
+    "forbidden",
+    "partial",
+    "ready"
+  ],
+  "feedback": [
+    "save-success",
+    "save-failure",
+    "delete-confirm",
+    "batch-result"
+  ]
+}

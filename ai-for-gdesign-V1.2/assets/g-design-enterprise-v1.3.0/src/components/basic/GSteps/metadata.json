@@ -1,0 +1,19 @@
+{
+  "id": "g-steps",
+  "name": "GSteps",
+  "level": "basic",
+  "category": "navigation",
+  "base": "ElSteps",
+  "description": "流程进度",
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "states": [
+    "default",
+    "hover",
+    "active",
+    "focus",
+    "disabled"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "id": "g-badge",
+  "name": "GBadge",
+  "level": "basic",
+  "category": "feedback",
+  "base": "ElBadge",
+  "description": "数量与提醒标记",
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "states": [
+    "default",
+    "hover",
+    "active",
+    "focus",
+    "disabled"
+  ]
+}

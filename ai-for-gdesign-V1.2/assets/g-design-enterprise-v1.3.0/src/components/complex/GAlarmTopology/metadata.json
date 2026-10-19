@@ -1,0 +1,1 @@
+{"id":"g-alarm-topology","name":"GAlarmTopology","level":"complex","dependencies":["GTopology"],"scenarios":["故障定位","告警影响分析"],"capabilities":["严重节点统计","影响路径"]}

@@ -1,0 +1,19 @@
+{
+  "id": "g-checkbox",
+  "name": "GCheckbox",
+  "level": "basic",
+  "category": "selection",
+  "base": "ElCheckbox",
+  "description": "多项选择",
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "states": [
+    "default",
+    "hover",
+    "active",
+    "focus",
+    "disabled"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "id": "g-radio",
+  "name": "GRadio",
+  "level": "basic",
+  "category": "selection",
+  "base": "ElRadio",
+  "description": "单项选择",
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "states": [
+    "default",
+    "hover",
+    "active",
+    "focus",
+    "disabled"
+  ]
+}

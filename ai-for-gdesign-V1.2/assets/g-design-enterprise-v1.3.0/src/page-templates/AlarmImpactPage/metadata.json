@@ -1,0 +1,26 @@
+{
+  "id": "alarm-impact-page",
+  "name": "AlarmImpactPage",
+  "complexity": "complex",
+  "scenarios": [
+    "告警分析",
+    "故障处置"
+  ],
+  "components": [
+    "GAlarmTopology"
+  ],
+  "pageStates": [
+    "loading",
+    "empty",
+    "error",
+    "forbidden",
+    "partial",
+    "ready"
+  ],
+  "feedback": [
+    "save-success",
+    "save-failure",
+    "delete-confirm",
+    "batch-result"
+  ]
+}

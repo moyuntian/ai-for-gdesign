@@ -1,0 +1,28 @@
+{
+  "id": "device-management-page",
+  "name": "DeviceManagementPage",
+  "complexity": "medium",
+  "scenarios": [
+    "设备管理",
+    "资产管理"
+  ],
+  "components": [
+    "GDashboardGrid",
+    "GMetricCard",
+    "StandardListPage"
+  ],
+  "pageStates": [
+    "loading",
+    "empty",
+    "error",
+    "forbidden",
+    "partial",
+    "ready"
+  ],
+  "feedback": [
+    "save-success",
+    "save-failure",
+    "delete-confirm",
+    "batch-result"
+  ]
+}

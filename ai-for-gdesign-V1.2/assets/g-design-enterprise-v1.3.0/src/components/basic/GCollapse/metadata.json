@@ -1,0 +1,19 @@
+{
+  "id": "g-collapse",
+  "name": "GCollapse",
+  "level": "basic",
+  "category": "data",
+  "base": "ElCollapse",
+  "description": "分组内容折叠",
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "states": [
+    "default",
+    "hover",
+    "active",
+    "focus",
+    "disabled"
+  ]
+}

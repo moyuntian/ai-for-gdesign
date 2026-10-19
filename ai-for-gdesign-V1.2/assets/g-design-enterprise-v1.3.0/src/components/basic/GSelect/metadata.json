@@ -1,0 +1,19 @@
+{
+  "id": "g-select",
+  "name": "GSelect",
+  "level": "basic",
+  "category": "selection",
+  "base": "ElSelect",
+  "description": "单项或多项选择",
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "states": [
+    "default",
+    "hover",
+    "active",
+    "focus",
+    "disabled"
+  ]
+}

@@ -1,0 +1,7 @@
+﻿/* swt-default.css — 默认亮色皮肤入口
+   实际 --color-* 值由 tokens/ 下的 g-design-enterprise 文件提供。
+   本文件只做主题切换入口，不定义颜色值。 */
+
+html[data-swt-theme="default"] {
+  /* tokens/semantic-light.css 已在 :root 下定义全部 --color-* 值 */
+}

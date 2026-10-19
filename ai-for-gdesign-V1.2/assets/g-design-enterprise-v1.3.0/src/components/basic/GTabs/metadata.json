@@ -1,0 +1,19 @@
+{
+  "id": "g-tabs",
+  "name": "GTabs",
+  "level": "basic",
+  "category": "navigation",
+  "base": "ElTabs",
+  "description": "同层内容切换",
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "states": [
+    "default",
+    "hover",
+    "active",
+    "focus",
+    "disabled"
+  ]
+}

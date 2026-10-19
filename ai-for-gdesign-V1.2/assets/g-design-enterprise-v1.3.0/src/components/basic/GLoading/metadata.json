@@ -1,0 +1,13 @@
+{
+  "id": "gloading",
+  "name": "GLoading",
+  "level": "basic",
+  "category": "service",
+  "base": "ElLoading",
+  "description": "全局或局部加载",
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "api": "function"
+}

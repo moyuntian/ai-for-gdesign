@@ -1,0 +1,21 @@
+schema_version: 1.0
+project_id: ""
+sources: []
+current_journey: []
+core_experience_needs: []
+opportunities: []
+design_directions:
+  - id: direction-a
+    name: ""
+    status: draft
+    evidence: []
+    core_object: ""
+    entry: ""
+    organization: ""
+    journey_change: ""
+    benefits: []
+    tradeoffs: []
+    applicable_conditions: []
+    open_questions: []
+evidence_gaps: []
+decisions_required: []

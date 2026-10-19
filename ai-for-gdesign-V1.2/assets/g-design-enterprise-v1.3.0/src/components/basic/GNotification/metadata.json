@@ -1,0 +1,13 @@
+{
+  "id": "gnotification",
+  "name": "GNotification",
+  "level": "basic",
+  "category": "service",
+  "base": "ElNotification",
+  "description": "系统级通知",
+  "themes": [
+    "light",
+    "dark"
+  ],
+  "api": "function"
+}
